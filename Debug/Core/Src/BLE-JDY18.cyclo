@@ -1,0 +1,10 @@
+../Core/Src/BLE-JDY18.c:11:6:setup	1
+../Core/Src/BLE-JDY18.c:15:6:setConfig	1
+../Core/Src/BLE-JDY18.c:19:6:reset	1
+../Core/Src/BLE-JDY18.c:23:6:sendCommand	1
+../Core/Src/BLE-JDY18.c:38:6:setName	1
+../Core/Src/BLE-JDY18.c:44:6:getName	1
+../Core/Src/BLE-JDY18.c:53:6:setRole	1
+../Core/Src/BLE-JDY18.c:60:6:setBaudRate	1
+../Core/Src/BLE-JDY18.c:68:6:scan	1
+../Core/Src/BLE-JDY18.c:78:6:_getDevicesFromScanStr	5
