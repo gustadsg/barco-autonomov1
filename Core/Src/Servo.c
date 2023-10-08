@@ -20,19 +20,17 @@ void setPWMAngle(ServoConfig_t servoConfig, float angle) {
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-void setPWMPercentage(TimerConfig_t timerConfig, float percentage) {
-	Scale_t percentageScale;
-	percentageScale.min = 0;
-	percentageScale.max = 100;
+void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
+	Scale_t angleScale;
+	angleScale.min = 0;
+	angleScale.max = 100;
 
-	Scale_t pwmScale;
-	pwmScale.min = 0.05 * 1250;
-	pwmScale.max = 0.115 * 1250;
+	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
 
-	float convertedToPWM = __convertScales(percentageScale, pwmScale,
-			percentage);
-	setPWM(timerConfig.handle, timerConfig.channel, timerConfig.period,
-			convertedToPWM);
+	float convertedToPWM = __convertScales(angleScale, pwmScale,
+			__getCalibratedAngle(servoConfig.calibration, angle));
+	setPWM(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
+			servoConfig.timerConfig.period, convertedToPWM);
 }
 
 Scale_t __getPWMScale(TimerConfig_t timerConfig) {

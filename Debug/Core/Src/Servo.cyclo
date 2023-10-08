@@ -1,6 +1,6 @@
 ../Core/Src/Servo.c:10:6:setPWMAngle	1
 ../Core/Src/Servo.c:23:6:setPWMPercentage	1
-../Core/Src/Servo.c:38:9:__getPWMScale	1
-../Core/Src/Servo.c:48:7:__convertScales	1
-../Core/Src/Servo.c:64:7:__getCalibratedAngle	1
-../Core/Src/Servo.c:68:6:setPWM	1
+../Core/Src/Servo.c:36:9:__getPWMScale	1
+../Core/Src/Servo.c:46:7:__convertScales	1
+../Core/Src/Servo.c:62:7:__getCalibratedAngle	1
+../Core/Src/Servo.c:66:6:setPWM	1

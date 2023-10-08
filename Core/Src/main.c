@@ -55,7 +55,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-
+void setPWMM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
+		uint16_t pulseLength);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -70,20 +71,7 @@ static void MX_TIM3_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  TimerConfig_t servoPWMConfig;
-  servoPWMConfig.handle = htim3;
-  servoPWMConfig.channel = TIM_CHANNEL_2;
-  servoPWMConfig.period = 1250;
-  servoPWMConfig.minDutyCyclePercentage = 0.05;
-  servoPWMConfig.maxDutyCyclePercentage = 0.1;
 
-  ServoCalibration_t servoCalibration;
-  servoCalibration.gain = 1.47;
-  servoCalibration.offset = -12.6;
-
-  ServoConfig_t servoConfig;
-  servoConfig.timerConfig = servoPWMConfig;
-  servoConfig.calibration = servoCalibration;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -107,8 +95,20 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  TimerConfig_t servoPWMConfig;
+  servoPWMConfig.handle = htim3;
+  servoPWMConfig.channel = TIM_CHANNEL_2;
+  servoPWMConfig.period = 1250;
+  servoPWMConfig.minDutyCyclePercentage = 0.05;
+  servoPWMConfig.maxDutyCyclePercentage = 0.115;
 
+  ServoCalibration_t servoCalibration;
+  servoCalibration.gain = 1.47;
+  servoCalibration.offset = -12.6;
 
+  ServoConfig_t servoConfig;
+  servoConfig.timerConfig = servoPWMConfig;
+  servoConfig.calibration = servoCalibration;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -305,6 +305,19 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void setPWMM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
+		uint16_t pulseLength) {
+	HAL_TIM_PWM_Stop(&timer, channel); // stop generation of pwm
+	TIM_OC_InitTypeDef sConfigOC;
+	timer.Init.Period = period; // set the period duration
+	HAL_TIM_PWM_Init(&timer); // reinitialise with new period value
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = pulseLength; // set the pulse duration
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+	HAL_TIM_PWM_ConfigChannel(&timer, &sConfigOC, channel);
+	HAL_TIM_PWM_Start(&timer, channel); // start PWM generation
+}
 /* USER CODE END 4 */
 
 /**

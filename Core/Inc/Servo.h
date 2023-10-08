@@ -37,7 +37,7 @@ typedef struct {
 } ServoConfig_t;
 
 void setPWMAngle(ServoConfig_t servoConfig, float angle);
-void setPWMPercentage(TimerConfig_t timerConfig, float percentage);
+void setPWMPercentage(ServoConfig_t servoConfig, float angle);
 void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period, uint16_t pulseLength);
 
 float __convertScales(Scale_t from, Scale_t to, float point);
