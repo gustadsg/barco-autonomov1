@@ -109,6 +109,9 @@ int main(void)
   ServoConfig_t servoConfig;
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
+
+  int pwmIncrement = 5;
+  int pwmValue = -90;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,17 +122,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	setPWMAngle(servoConfig, -90);
-	HAL_Delay(2000);
+	pwmValue += pwmIncrement;
+	if((pwmValue <= -90) || (pwmValue >= 90)) pwmIncrement = -pwmIncrement;
 
-	setPWMAngle(servoConfig, 0);
-	HAL_Delay(2000);
-
-	setPWMAngle(servoConfig, 90);
-	HAL_Delay(2000);
-
-	setPWMAngle(servoConfig, 0);
-	HAL_Delay(2000);
+	setPWMAngle(servoConfig, pwmValue);
+	HAL_Delay(500);
 
   }
   /* USER CODE END 3 */
