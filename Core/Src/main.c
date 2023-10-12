@@ -32,7 +32,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define SERVO_PERIOD 1250;
+#define SERVO_MIN_DUTY_CICLE 0.05;
+#define SERVO_MAX_DUTY_CICLE 0.115;
+#define SERVO_CALIBRATION_GAIN 1.47;
+#define SERVO_CALIBRATION_OFFSET -12.6;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -98,20 +102,22 @@ int main(void)
   TimerConfig_t servoPWMConfig;
   servoPWMConfig.handle = htim3;
   servoPWMConfig.channel = TIM_CHANNEL_2;
-  servoPWMConfig.period = 1250;
-  servoPWMConfig.minDutyCyclePercentage = 0.05;
-  servoPWMConfig.maxDutyCyclePercentage = 0.115;
+  servoPWMConfig.period = SERVO_PERIOD;
+  servoPWMConfig.minDutyCyclePercentage = SERVO_MIN_DUTY_CICLE;
+  servoPWMConfig.maxDutyCyclePercentage = SERVO_MAX_DUTY_CICLE;
 
   ServoCalibration_t servoCalibration;
-  servoCalibration.gain = 1.47;
-  servoCalibration.offset = -12.6;
+  servoCalibration.gain = SERVO_CALIBRATION_GAIN;
+  servoCalibration.offset = SERVO_CALIBRATION_OFFSET;
 
   ServoConfig_t servoConfig;
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
 
-  int pwmIncrement = 5;
-  int pwmValue = -90;
+  const int servoMin = SERVO_MIN_ANGLE;
+  const int servoMax = SERVO_MAX_ANGLE;
+  int pwmServoIncrement = 5;
+  int pwmServoValue = servoMin;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -122,10 +128,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	pwmValue += pwmIncrement;
-	if((pwmValue <= -90) || (pwmValue >= 90)) pwmIncrement = -pwmIncrement;
+	pwmServoValue += pwmServoIncrement;
+	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
 
-	setPWMAngle(servoConfig, pwmValue);
+	setPWMAngle(servoConfig, pwmServoValue);
 	HAL_Delay(500);
 
   }

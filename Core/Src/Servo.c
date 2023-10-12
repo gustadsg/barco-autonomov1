@@ -9,8 +9,10 @@
 
 void setPWMAngle(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
-	angleScale.min = -90;
-	angleScale.max = 90;
+	angleScale.min = SERVO_MIN_ANGLE
+	;
+	angleScale.max = SERVO_MAX_ANGLE
+	;
 
 	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
 
@@ -22,8 +24,10 @@ void setPWMAngle(ServoConfig_t servoConfig, float angle) {
 
 void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
-	angleScale.min = 0;
-	angleScale.max = 100;
+	angleScale.min = MOTOR_MIN_PERCENT
+	;
+	angleScale.max = MOTOR_MAX_PERCENT
+	;
 
 	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
 
@@ -35,10 +39,8 @@ void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
 
 Scale_t __getPWMScale(TimerConfig_t timerConfig) {
 	Scale_t pwmScale;
-	pwmScale.min = timerConfig.minDutyCyclePercentage
-			* timerConfig.period;
-	pwmScale.max = timerConfig.maxDutyCyclePercentage
-				* timerConfig.period;
+	pwmScale.min = timerConfig.minDutyCyclePercentage * timerConfig.period;
+	pwmScale.max = timerConfig.maxDutyCyclePercentage * timerConfig.period;
 
 	return pwmScale;
 }

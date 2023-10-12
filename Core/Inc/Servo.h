@@ -11,6 +11,11 @@
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
 
+#define SERVO_MIN_ANGLE -90;
+#define SERVO_MAX_ANGLE 90;
+#define MOTOR_MIN_PERCENT 0;
+#define MOTOR_MAX_PERCENT 100;
+
 typedef struct {
 	float min;
 	float max;
