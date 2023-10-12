@@ -7,7 +7,7 @@
 
 #include "Servo.h"
 
-void setPWMAngle(ServoConfig_t servoConfig, float angle) {
+void setServoPWMAngle(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
 	angleScale.min = SERVO_MIN_ANGLE
 	;
@@ -22,12 +22,10 @@ void setPWMAngle(ServoConfig_t servoConfig, float angle) {
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
+void setServoPWMPercentage(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
-	angleScale.min = MOTOR_MIN_PERCENT
-	;
-	angleScale.max = MOTOR_MAX_PERCENT
-	;
+	angleScale.min = SERVO_MIN_PERCENT;
+	angleScale.max = SERVO_MAX_PERCENT;
 
 	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
 
@@ -37,7 +35,7 @@ void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-Scale_t __getPWMScale(TimerConfig_t timerConfig) {
+Scale_t __getPWMScale(ServoTimerConfig_t timerConfig) {
 	Scale_t pwmScale;
 	pwmScale.min = timerConfig.minDutyCyclePercentage * timerConfig.period;
 	pwmScale.max = timerConfig.maxDutyCyclePercentage * timerConfig.period;
@@ -63,18 +61,4 @@ float __convertScales(Scale_t from, Scale_t to, float point) {
  */
 float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle) {
 	return calibration.gain * desiredAngle + calibration.offset; // y = a*x + b
-}
-
-void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
-		uint16_t pulseLength) {
-	HAL_TIM_PWM_Stop(&timer, channel); // stop generation of pwm
-	TIM_OC_InitTypeDef sConfigOC;
-	timer.Init.Period = period; // set the period duration
-	HAL_TIM_PWM_Init(&timer); // reinitialise with new period value
-	sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	sConfigOC.Pulse = pulseLength; // set the pulse duration
-	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	HAL_TIM_PWM_ConfigChannel(&timer, &sConfigOC, channel);
-	HAL_TIM_PWM_Start(&timer, channel); // start PWM generation
 }
