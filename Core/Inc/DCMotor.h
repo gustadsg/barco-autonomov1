@@ -10,9 +10,15 @@
 
 #include "Pwm.h"
 
-#define MOTOR_MIN_PERCENT 0;
-#define MOTOR_MAX_PERCENT 100;
+#define DC_MOTOR_MIN_PERCENT 0;
+#define DC_MOTOR_MAX_PERCENT 100;
 
-void setDCMotorPWMPercentage(float percentage);
+typedef struct {
+	TIM_HandleTypeDef handle;
+	uint32_t channel;
+	uint32_t period;
+} DCMotorTimerConfig_t;
+
+void setDCMotorPWMPercentage(DCMotorTimerConfig_t timerConfig, float percentage);
 
 #endif /* INC_DCMOTOR_H_ */

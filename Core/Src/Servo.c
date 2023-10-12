@@ -35,7 +35,7 @@ void setServoPWMPercentage(ServoConfig_t servoConfig, float angle) {
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-Scale_t __getPWMScale(TimerConfig_t timerConfig) {
+Scale_t __getPWMScale(ServoTimerConfig_t timerConfig) {
 	Scale_t pwmScale;
 	pwmScale.min = timerConfig.minDutyCyclePercentage * timerConfig.period;
 	pwmScale.max = timerConfig.maxDutyCyclePercentage * timerConfig.period;

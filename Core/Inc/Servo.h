@@ -33,10 +33,10 @@ typedef struct {
 	//	porcentagens de duty cycle para ângulos mínimo e máximo
 	float minDutyCyclePercentage;
 	float maxDutyCyclePercentage;
-} TimerConfig_t;
+} ServoTimerConfig_t;
 
 typedef struct {
-	TimerConfig_t timerConfig;
+	ServoTimerConfig_t timerConfig;
 	ServoCalibration_t calibration;
 } ServoConfig_t;
 
@@ -45,6 +45,6 @@ void setServoPWMPercentage(ServoConfig_t servoConfig, float angle);
 
 float __convertScales(Scale_t from, Scale_t to, float point);
 float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle);
-Scale_t __getPWMScale(TimerConfig_t timerConfig);
+Scale_t __getPWMScale(ServoTimerConfig_t timerConfig);
 
 #endif /* INC_SERVO_H_ */

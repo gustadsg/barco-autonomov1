@@ -99,7 +99,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  TimerConfig_t servoPWMConfig;
+  ServoTimerConfig_t servoPWMConfig;
   servoPWMConfig.handle = htim3;
   servoPWMConfig.channel = TIM_CHANNEL_2;
   servoPWMConfig.period = SERVO_PERIOD;
