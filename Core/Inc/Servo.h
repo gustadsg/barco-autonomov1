@@ -8,8 +8,7 @@
 #ifndef INC_SERVO_H_
 #define INC_SERVO_H_
 
-#include <stdint.h>
-#include "stm32f4xx_hal.h"
+#include "Pwm.h"
 
 #define SERVO_MIN_ANGLE -90;
 #define SERVO_MAX_ANGLE 90;
@@ -43,8 +42,6 @@ typedef struct {
 
 void setServoPWMAngle(ServoConfig_t servoConfig, float angle);
 void setServoPWMPercentage(ServoConfig_t servoConfig, float angle);
-void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
-		uint16_t pulseLength);
 
 float __convertScales(Scale_t from, Scale_t to, float point);
 float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle);

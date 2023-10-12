@@ -6,3 +6,7 @@
  */
 
 #include "DCMotor.h"
+
+void setDCMotorPWMPercentage(float percentage){
+
+}
