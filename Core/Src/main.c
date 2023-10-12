@@ -131,7 +131,7 @@ int main(void)
 	pwmServoValue += pwmServoIncrement;
 	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
 
-	setPWMAngle(servoConfig, pwmServoValue);
+	setServoPWMAngle(servoConfig, pwmServoValue);
 	HAL_Delay(500);
 
   }

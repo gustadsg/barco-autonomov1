@@ -7,7 +7,7 @@
 
 #include "Servo.h"
 
-void setPWMAngle(ServoConfig_t servoConfig, float angle) {
+void setServoPWMAngle(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
 	angleScale.min = SERVO_MIN_ANGLE
 	;
@@ -22,12 +22,10 @@ void setPWMAngle(ServoConfig_t servoConfig, float angle) {
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-void setPWMPercentage(ServoConfig_t servoConfig, float angle) {
+void setServoPWMPercentage(ServoConfig_t servoConfig, float angle) {
 	Scale_t angleScale;
-	angleScale.min = MOTOR_MIN_PERCENT
-	;
-	angleScale.max = MOTOR_MAX_PERCENT
-	;
+	angleScale.min = SERVO_MIN_PERCENT;
+	angleScale.max = SERVO_MAX_PERCENT;
 
 	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
 

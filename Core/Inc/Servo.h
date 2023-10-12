@@ -13,8 +13,8 @@
 
 #define SERVO_MIN_ANGLE -90;
 #define SERVO_MAX_ANGLE 90;
-#define MOTOR_MIN_PERCENT 0;
-#define MOTOR_MAX_PERCENT 100;
+#define SERVO_MIN_PERCENT 0;
+#define SERVO_MAX_PERCENT 100;
 
 typedef struct {
 	float min;
@@ -41,12 +41,13 @@ typedef struct {
 	ServoCalibration_t calibration;
 } ServoConfig_t;
 
-void setPWMAngle(ServoConfig_t servoConfig, float angle);
-void setPWMPercentage(ServoConfig_t servoConfig, float angle);
-void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period, uint16_t pulseLength);
+void setServoPWMAngle(ServoConfig_t servoConfig, float angle);
+void setServoPWMPercentage(ServoConfig_t servoConfig, float angle);
+void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
+		uint16_t pulseLength);
 
 float __convertScales(Scale_t from, Scale_t to, float point);
-float __getCalibratedAngle(ServoCalibration_t calibration ,float desiredAngle);
+float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle);
 Scale_t __getPWMScale(TimerConfig_t timerConfig);
 
 #endif /* INC_SERVO_H_ */
