@@ -1,0 +1,3 @@
+../Core/Src/HMC5883L.c:10:19:hmc5883l_init	3
+../Core/Src/HMC5883L.c:37:19:hmc5883l_read	5
+../Core/Src/HMC5883L.c:66:19:__setData	5
