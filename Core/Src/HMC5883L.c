@@ -36,6 +36,14 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 
 HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 	HAL_StatusTypeDef status;
+	Status_t readyOrLocked = LOCKED;
+
+	// wait until data registers are unlocked
+	while(readyOrLocked == LOCKED) {
+		status = __getStatus(config, &readyOrLocked);
+		if(status != HAL_OK) return status;
+		if(readyOrLocked == LOCKED) HAL_Delay(10);
+	}
 
 	uint8_t addrsLow[3] = {DOX_L_ADDR, DOY_L_ADDR, DOZ_L_ADDR};
 	uint8_t addrsHigh[3] = {DOX_H_ADDR, DOY_H_ADDR, DOZ_H_ADDR};
@@ -45,10 +53,10 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 	int16_t axisData = 0;
 
 	for(int i=0; i<3; i++) {
-		// msb
+		// get most significant bits
 		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], sizeof(uint8_t), &dataHigh, sizeof(uint8_t), HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
-		// lsb
+		// get less significant bits
 		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsLow[i], sizeof(uint8_t), &dataLow, sizeof(uint8_t), HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
 
@@ -56,14 +64,16 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 		axisData <<= 8;
 		axisData |= dataLow;
 
-		status = __setData(data, axisArr[i], axisData);
+		status = __setDataAxis(data, axisArr[i], axisData);
 		if(status != HAL_OK) return status;
 	}
+
+	__setDataAngles(data);
 
 	return HAL_OK;
 }
 
-HAL_StatusTypeDef __setData(HMC5883LData_t *data, uint8_t axis, int16_t axisData) {
+HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData) {
 	switch(axis) {
 		case __X:
 			data->x = axisData;
@@ -77,4 +87,25 @@ HAL_StatusTypeDef __setData(HMC5883LData_t *data, uint8_t axis, int16_t axisData
 		default:
 			return HAL_ERROR;
 	}
+}
+
+void __setDataAngles(HMC5883LData_t *data) {
+	data->radians = atan2f(data->x, data->y);
+	data->degrees = data->radians * (180.0/M_PI);
+}
+
+HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus) {
+	HAL_StatusTypeDef status;
+	uint8_t statusRegisterData = 0;
+
+	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, STATUS_REGISTER_ADDR, sizeof(uint8_t), &statusRegisterData, sizeof(uint8_t), HAL_MAX_DELAY);
+	if(status != HAL_OK) return status;
+
+	// clear the six most significant bits, since they are not used
+	statusRegisterData &= 0b00000011;
+
+	*registerStatus = statusRegisterData;
+
+	// the only possible values read are READY and LOCKED, otherwise an error occurred in the communication
+	return (statusRegisterData == READY || statusRegisterData == LOCKED) ? HAL_OK : HAL_ERROR;
 }

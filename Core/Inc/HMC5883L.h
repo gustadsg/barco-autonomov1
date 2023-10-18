@@ -9,6 +9,7 @@
 #define INC_HMC5883L_H_
 
 #include "inttypes.h"
+#include "math.h"
 #include "stm32f4xx_hal.h"
 
 #define CRA7 0x0
@@ -106,10 +107,19 @@ typedef struct {
 	uint16_t x;
 	uint16_t y;
 	uint16_t z;
+	float degrees;
+	float radians;
 } HMC5883LData_t;
+
+typedef enum {
+	READY = 1,
+	LOCKED
+} Status_t;
 
 HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config);
 HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data);
-HAL_StatusTypeDef __setData(HMC5883LData_t *data, uint8_t axis, int16_t axisData);
+HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData);
+HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *status);
+void __setDataAngles(HMC5883LData_t *data);
 
 #endif /* INC_HMC5883L_H_ */

@@ -1,3 +1,5 @@
 ../Core/Src/HMC5883L.c:10:19:hmc5883l_init	48	static
 ../Core/Src/HMC5883L.c:37:19:hmc5883l_read	72	static
-../Core/Src/HMC5883L.c:66:19:__setData	16	static
+../Core/Src/HMC5883L.c:76:19:__setDataAxis	16	static
+../Core/Src/HMC5883L.c:92:6:__setDataAngles	16	static
+../Core/Src/HMC5883L.c:97:19:__getStatus	56	static
