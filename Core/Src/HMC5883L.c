@@ -24,13 +24,13 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 
 	HAL_StatusTypeDef status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_A_ADDR, sizeof(uint8_t), &registerA, sizeof(registerA), HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_A_ADDR, I2C_MEMADD_SIZE_8BIT, &registerA, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_B_ADDR, sizeof(uint8_t), &registerB, sizeof(registerB), HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_B_ADDR, I2C_MEMADD_SIZE_8BIT, &registerB, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_MODE_ADDR, sizeof(uint8_t), &registerMode, sizeof(registerMode), HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_MODE_ADDR, I2C_MEMADD_SIZE_8BIT, &registerMode, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	return status;
 }
 
@@ -54,10 +54,10 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 
 	for(int i=0; i<3; i++) {
 		// get most significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], sizeof(uint8_t), &dataHigh, sizeof(uint8_t), HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
 		// get less significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsLow[i], sizeof(uint8_t), &dataLow, sizeof(uint8_t), HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsLow[i], I2C_MEMADD_SIZE_8BIT, &dataLow, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
 
 		axisData = dataHigh;

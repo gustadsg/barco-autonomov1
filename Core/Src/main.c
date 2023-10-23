@@ -85,7 +85,8 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -119,6 +120,17 @@ int main(void)
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
 
+  HMC5883LConfig_t magnetometerConfig;
+  magnetometerConfig.dataOutputRate = DOR_15;
+  magnetometerConfig.gain = GAIN_0_88;
+  magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
+  magnetometerConfig.operatingMode = SINGLE_MODE;
+  magnetometerConfig.samplesNum = SAMPLES_8;
+  magnetometerConfig.handle = &hi2c1;
+  hmc5883l_init(magnetometerConfig);
+
+  HMC5883LData_t magnetometerData = {0,0,0,0,0};
+
   const int servoMin = SERVO_MIN_ANGLE;
   const int servoMax = SERVO_MAX_ANGLE;
   int pwmServoIncrement = 5;
@@ -133,10 +145,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	pwmServoValue += pwmServoIncrement;
-	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
+//	pwmServoValue += pwmServoIncrement;
+//	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
+//
+//	setServoPWMAngle(servoConfig, pwmServoValue);
+//	HAL_Delay(500);
 
-	setServoPWMAngle(servoConfig, pwmServoValue);
+	hmc5883l_read(magnetometerConfig, &magnetometerData);
 	HAL_Delay(500);
 
   }
@@ -174,8 +189,8 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV64;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV8;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV8;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV8;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
