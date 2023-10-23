@@ -90,7 +90,7 @@ typedef enum {
 } Gain_t;
 
 typedef enum {
-	CONTINUOS_MODE,
+	CONTINUOUS_MODE,
 	SINGLE_MODE,
 	IDLE_MODE,
 	IDLE_MODE2

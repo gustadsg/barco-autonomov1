@@ -123,7 +123,7 @@ int main(void)
   magnetometerConfig.dataOutputRate = DOR_15;
   magnetometerConfig.gain = GAIN_0_88;
   magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
-  magnetometerConfig.operatingMode = CONTINUOS_MODE;
+  magnetometerConfig.operatingMode = CONTINUOUS_MODE;
   magnetometerConfig.samplesNum = SAMPLES_8;
   magnetometerConfig.handle = &hi2c1;
   hmc5883l_init(magnetometerConfig);
