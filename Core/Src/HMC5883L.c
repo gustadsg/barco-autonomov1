@@ -98,7 +98,7 @@ HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus)
 	HAL_StatusTypeDef status;
 	uint8_t statusRegisterData = 0;
 
-	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, STATUS_REGISTER_ADDR, sizeof(uint8_t), &statusRegisterData, sizeof(uint8_t), HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, STATUS_REGISTER_ADDR, I2C_MEMADD_SIZE_8BIT, &statusRegisterData, 1, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
 	// clear the six most significant bits, since they are not used

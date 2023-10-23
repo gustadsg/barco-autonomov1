@@ -85,8 +85,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -124,7 +123,7 @@ int main(void)
   magnetometerConfig.dataOutputRate = DOR_15;
   magnetometerConfig.gain = GAIN_0_88;
   magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
-  magnetometerConfig.operatingMode = SINGLE_MODE;
+  magnetometerConfig.operatingMode = CONTINUOS_MODE;
   magnetometerConfig.samplesNum = SAMPLES_8;
   magnetometerConfig.handle = &hi2c1;
   hmc5883l_init(magnetometerConfig);
