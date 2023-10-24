@@ -8,6 +8,9 @@
 #ifndef INC_HMC5883L_H_
 #define INC_HMC5883L_H_
 
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "inttypes.h"
 #include "math.h"
 #include "stm32f4xx_hal.h"
@@ -97,12 +100,19 @@ typedef enum {
 } OperatingMode_t;
 
 typedef struct {
+	int16_t x_offset;
+	int16_t y_offset;
+	int16_t z_offset;
+} HMC5883LCalibration_t;
+
+typedef struct {
 	I2C_HandleTypeDef* handle;
 	SamplesNum_t samplesNum;
 	DataOutputRate_t dataOutputRate;
 	MesuarementMode_t measurementMode;
 	Gain_t gain;
 	OperatingMode_t operatingMode;
+	HMC5883LCalibration_t calibration;
 } HMC5883LConfig_t;
 
 typedef struct {
@@ -120,6 +130,7 @@ typedef enum {
 
 HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config);
 HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data);
+void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *huart);
 HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData);
 HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *status);
 void __setDataAngles(HMC5883LData_t *data);

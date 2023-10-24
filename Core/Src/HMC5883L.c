@@ -52,6 +52,8 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 	uint8_t dataHigh = 0, dataLow = 0;
 	int16_t axisData = 0;
 
+	int16_t offsetData[3] = {config.calibration.x_offset, config.calibration.y_offset, config.calibration.z_offset};
+
 	for(int i=0; i<3; i++) {
 		// get most significant bits
 		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
@@ -64,6 +66,8 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 		axisData <<= 8;
 		axisData |= dataLow;
 
+		axisData += offsetData[i];
+
 		status = __setDataAxis(data, axisArr[i], axisData);
 		if(status != HAL_OK) return status;
 	}
@@ -72,6 +76,27 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 
 	return HAL_OK;
 }
+
+/**
+ * Creates CSV format data, with collected points of x, y and z data. This data can be used with other software,
+ * such as Matlab, Excel, R, etc, to get the center point of the measured data and apply the found offsets to the
+ * HMC5883LCalibration_t in the HMC5883LConfig_t struct.
+ */
+void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *huart) {
+	volatile int32_t num_collected = 0;
+	HMC5883LData_t data = {0,0,0,0,0};
+	char transmitStr[22];
+
+	while(num_collected < 2000) {
+		hmc5883l_read(config, &data);
+		sprintf(transmitStr,"%i, %i, %i\n", data.x, data.y, data.z);
+
+		HAL_UART_Transmit(huart, (uint8_t*)transmitStr, strlen(transmitStr), HAL_MAX_DELAY);
+		HAL_Delay(20);
+		num_collected++;
+	}
+}
+
 
 HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData) {
 	switch(axis) {
