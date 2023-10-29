@@ -18,12 +18,12 @@
 typedef struct {
 	float min;
 	float max;
-} Scale_t;
+} SERVO_Scale_t;
 
 typedef struct {
 	float offset;
 	float gain;
-} ServoCalibration_t;
+} SERVO_Calibration_t;
 
 typedef struct {
 	TIM_HandleTypeDef handle;
@@ -33,18 +33,18 @@ typedef struct {
 	//	porcentagens de duty cycle para ângulos mínimo e máximo
 	float minDutyCyclePercentage;
 	float maxDutyCyclePercentage;
-} ServoTimerConfig_t;
+} SERVO_TimerConfig_t;
 
 typedef struct {
-	ServoTimerConfig_t timerConfig;
-	ServoCalibration_t calibration;
-} ServoConfig_t;
+	SERVO_TimerConfig_t timerConfig;
+	SERVO_Calibration_t calibration;
+} SERVO_Config_t;
 
-void setServoPWMAngle(ServoConfig_t servoConfig, float angle);
-void setServoPWMPercentage(ServoConfig_t servoConfig, float angle);
+void SERVO_SetAngle(SERVO_Config_t servoConfig, float angle);
+void SERVO_SetPercentage(SERVO_Config_t servoConfig, float angle);
 
-float __convertScales(Scale_t from, Scale_t to, float point);
-float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle);
-Scale_t __getPWMScale(ServoTimerConfig_t timerConfig);
+float __SERVO_ConvertScales(SERVO_Scale_t from, SERVO_Scale_t to, float point);
+float __SERVO_GetCalibratedAngle(SERVO_Calibration_t calibration, float desiredAngle);
+SERVO_Scale_t __SERVO_GetPWMScale(SERVO_TimerConfig_t timerConfig);
 
 #endif /* INC_SERVO_H_ */

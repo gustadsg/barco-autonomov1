@@ -104,18 +104,18 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  ServoTimerConfig_t servoPWMConfig;
+  SERVO_TimerConfig_t servoPWMConfig;
   servoPWMConfig.handle = htim3;
   servoPWMConfig.channel = TIM_CHANNEL_2;
   servoPWMConfig.period = SERVO_PERIOD;
   servoPWMConfig.minDutyCyclePercentage = SERVO_MIN_DUTY_CICLE;
   servoPWMConfig.maxDutyCyclePercentage = SERVO_MAX_DUTY_CICLE;
 
-  ServoCalibration_t servoCalibration;
+  SERVO_Calibration_t servoCalibration;
   servoCalibration.gain = SERVO_CALIBRATION_GAIN;
   servoCalibration.offset = SERVO_CALIBRATION_OFFSET;
 
-  ServoConfig_t servoConfig;
+  SERVO_Config_t servoConfig;
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
 
