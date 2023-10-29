@@ -1,6 +1,6 @@
-../Core/Src/HMC5883L.c:10:19:hmc5883l_init	56	static
-../Core/Src/HMC5883L.c:37:19:hmc5883l_read	80	static
-../Core/Src/HMC5883L.c:80:6:hmc5883l_getCalibrationData	88	static
-../Core/Src/HMC5883L.c:96:19:__setDataAxis	16	static
-../Core/Src/HMC5883L.c:112:6:__setDataAngles	16	static
-../Core/Src/HMC5883L.c:117:19:__getStatus	56	static
+../Core/Src/HMC5883L.c:10:19:HMC5883L_Init	56	static
+../Core/Src/HMC5883L.c:37:19:HMC5883L_Read	80	static
+../Core/Src/HMC5883L.c:85:6:HMC5883L_GetCalibrationData	88	static
+../Core/Src/HMC5883L.c:101:19:__HMC5883L_SetDataAxis	16	static
+../Core/Src/HMC5883L.c:117:6:__HMC5883L_SetDataAngles	16	static
+../Core/Src/HMC5883L.c:122:19:__HMC5883L_GetStatus	56	static

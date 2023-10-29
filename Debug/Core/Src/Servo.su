@@ -1,5 +1,5 @@
-../Core/Src/Servo.c:10:6:setServoPWMAngle	120	static
-../Core/Src/Servo.c:25:6:setServoPWMPercentage	120	static
-../Core/Src/Servo.c:38:9:__getPWMScale	32	static
-../Core/Src/Servo.c:46:7:__convertScales	48	static
-../Core/Src/Servo.c:62:7:__getCalibratedAngle	24	static
+../Core/Src/Servo.c:10:6:SERVO_SetAngle	120	static
+../Core/Src/Servo.c:25:6:SERVO_SetPercentage	120	static
+../Core/Src/Servo.c:38:15:__SERVO_GetPWMScale	32	static
+../Core/Src/Servo.c:46:7:__SERVO_ConvertScales	48	static
+../Core/Src/Servo.c:62:7:__SERVO_GetCalibratedAngle	24	static

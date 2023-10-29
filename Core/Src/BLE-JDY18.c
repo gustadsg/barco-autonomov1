@@ -8,19 +8,19 @@
 
 UART_HandleTypeDef* husart;
 
-void setup(UART_HandleTypeDef* handle) {
+void JDY18_Setup(UART_HandleTypeDef* handle) {
 	husart = handle;
 }
 
-void setConfig(char* config) {
-	sendCommand("PERM", config);
+void JDY18_SetConfig(char* config) {
+	JDY18_SendCommand("PERM", config);
 }
 
-void reset() {
-	sendCommand("DEFAULT", "");
+void JDY18_Reset() {
+	JDY18_SendCommand("DEFAULT", "");
 }
 
-void sendCommand(char* commandPrefix, char* commandParam) {
+void JDY18_SendCommand(char* commandPrefix, char* commandParam) {
 	char* command = "AT+";
 
 	int commandSize = strlen(command) + strlen(commandPrefix) + strlen(commandParam) + 3;
@@ -35,48 +35,48 @@ void sendCommand(char* commandPrefix, char* commandParam) {
 	HAL_UART_Transmit(husart, (uint8_t*) command, commandSize, HAL_MAX_DELAY);
 }
 
-void setName(char* name) {
+void JDY18_SetName(char* name) {
 	char command[30] = "AT+";
 	strcat(command, name);
-	sendCommand("NAME", name);
+	JDY18_SendCommand("NAME", name);
 }
 
-void getName(char* name) {
+void JDY18_GetName(char* name) {
 	name = malloc(24);
 	memset(name, 0, 24);
 
-	sendCommand("NAME", "");
+	JDY18_SendCommand("NAME", "");
 
 	HAL_UART_Receive(husart, (uint8_t*) name, 24, HAL_MAX_DELAY);
 }
 
-void setRole(Role_t role) {
+void JDY18_SetRole(JDY18_Role_t role) {
 	char roleStr[2];
 	itoa(role, roleStr, 10);
 
-	sendCommand("ROLE", roleStr);
+	JDY18_SendCommand("ROLE", roleStr);
 }
 
-void setBaudRate(BaudRate_t baud) {
+void JDY18_SetBaudRate(JDY18_BaudRate_t baud) {
 	char baudStr[5] = "";
 	itoa(baud, baudStr, 10);
 
 
-	sendCommand("BAUD", baudStr);
+	JDY18_SendCommand("BAUD", baudStr);
 }
 
-void scan(Device_t *devices) {
-	char data[BUFFER_SZ];
-	memset(data, 0, BUFFER_SZ);
+void JDY18_Scan(JDY18_Device_t *devices) {
+	char data[JDY18_BUFFER_SZ];
+	memset(data, 0, JDY18_BUFFER_SZ);
 
-	sendCommand("IQN", "");
-	HAL_UART_Receive(husart, (uint8_t*) data, BUFFER_SZ, 1000);
+	JDY18_SendCommand("IQN", "");
+	HAL_UART_Receive(husart, (uint8_t*) data, JDY18_BUFFER_SZ, 1000);
 
-	_getDevicesFromScanStr(data, devices, MAX_DEVICES);
+	_getDevicesFromScanStr(data, devices, JDY18_MAX_DEVICES);
 }
 
-void _getDevicesFromScanStr(char* str, Device_t *devices, int8_t maxDevices) {
-	char inputCopy[BUFFER_SZ];
+void _getDevicesFromScanStr(char* str, JDY18_Device_t *devices, int8_t maxDevices) {
+	char inputCopy[JDY18_BUFFER_SZ];
 	strcpy(inputCopy, str);
 
 	const char *token = strtok(inputCopy, "\r\n");

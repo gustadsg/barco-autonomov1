@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_rnglists 00000be8  00000000  00000000  00032fa8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00002946  00000000  00000000  00033b90  2**0
+ 17 .debug_macro  00002940  00000000  00000000  00033b90  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00013411  00000000  00000000  000364d6  2**0
+ 18 .debug_line   00013411  00000000  00000000  000364d0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000d4d4b  00000000  00000000  000498e7  2**0
+ 19 .debug_str    000d4fac  00000000  00000000  000498e1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00004714  00000000  00000000  0011e634  2**2
+ 20 .debug_frame  00004714  00000000  00000000  0011e890  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000061  00000000  00000000  00122d48  2**0
+ 21 .debug_line_str 00000061  00000000  00000000  00122fa4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -953,19 +953,19 @@ Disassembly of section .text:
  8000c24:	4770      	bx	lr
  8000c26:	bf00      	nop
 
-08000c28 <hmc5883l_init>:
+08000c28 <HMC5883L_Init>:
  *      Author: Gustavo da Silva Gomes
  */
 
 #include "HMC5883L.h"
 
-HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
+HAL_StatusTypeDef HMC5883L_Init(HMC5883L_Config_t config) {
  8000c28:	b590      	push	{r4, r7, lr}
  8000c2a:	b08b      	sub	sp, #44	; 0x2c
  8000c2c:	af04      	add	r7, sp, #16
  8000c2e:	463c      	mov	r4, r7
  8000c30:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
-	uint8_t registerA = CRA7;
+	uint8_t registerA = HMC5883L_REG_BIT_CRA7;
  8000c34:	2300      	movs	r3, #0
  8000c36:	75bb      	strb	r3, [r7, #22]
 	registerA <<= 2;
@@ -1023,7 +1023,7 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 
 	HAL_StatusTypeDef status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_A_ADDR, I2C_MEMADD_SIZE_8BIT, &registerA, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_A, I2C_MEMADD_SIZE_8BIT, &registerA, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
  8000c88:	6838      	ldr	r0, [r7, #0]
  8000c8a:	f04f 33ff 	mov.w	r3, #4294967295
  8000c8e:	9302      	str	r3, [sp, #8]
@@ -1040,11 +1040,11 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 	if(status != HAL_OK) return status;
  8000ca8:	7dfb      	ldrb	r3, [r7, #23]
  8000caa:	2b00      	cmp	r3, #0
- 8000cac:	d001      	beq.n	8000cb2 <hmc5883l_init+0x8a>
+ 8000cac:	d001      	beq.n	8000cb2 <HMC5883L_Init+0x8a>
  8000cae:	7dfb      	ldrb	r3, [r7, #23]
- 8000cb0:	e025      	b.n	8000cfe <hmc5883l_init+0xd6>
+ 8000cb0:	e025      	b.n	8000cfe <HMC5883L_Init+0xd6>
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_B_ADDR, I2C_MEMADD_SIZE_8BIT, &registerB, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_B, I2C_MEMADD_SIZE_8BIT, &registerB, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
  8000cb2:	6838      	ldr	r0, [r7, #0]
  8000cb4:	f04f 33ff 	mov.w	r3, #4294967295
  8000cb8:	9302      	str	r3, [sp, #8]
@@ -1061,11 +1061,11 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 	if(status != HAL_OK) return status;
  8000cd2:	7dfb      	ldrb	r3, [r7, #23]
  8000cd4:	2b00      	cmp	r3, #0
- 8000cd6:	d001      	beq.n	8000cdc <hmc5883l_init+0xb4>
+ 8000cd6:	d001      	beq.n	8000cdc <HMC5883L_Init+0xb4>
  8000cd8:	7dfb      	ldrb	r3, [r7, #23]
- 8000cda:	e010      	b.n	8000cfe <hmc5883l_init+0xd6>
+ 8000cda:	e010      	b.n	8000cfe <HMC5883L_Init+0xd6>
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_MODE_ADDR, I2C_MEMADD_SIZE_8BIT, &registerMode, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_MODE, I2C_MEMADD_SIZE_8BIT, &registerMode, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
  8000cdc:	6838      	ldr	r0, [r7, #0]
  8000cde:	f04f 33ff 	mov.w	r3, #4294967295
  8000ce2:	9302      	str	r3, [sp, #8]
@@ -1088,50 +1088,50 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
  8000d04:	bd90      	pop	{r4, r7, pc}
 	...
 
-08000d08 <hmc5883l_read>:
+08000d08 <HMC5883L_Read>:
 
-HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
+HAL_StatusTypeDef HMC5883L_Read(HMC5883L_Config_t config, HMC5883L_Data_t *data) {
  8000d08:	b590      	push	{r4, r7, lr}
  8000d0a:	b091      	sub	sp, #68	; 0x44
  8000d0c:	af04      	add	r7, sp, #16
  8000d0e:	463c      	mov	r4, r7
  8000d10:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
 	HAL_StatusTypeDef status;
-	Status_t readyOrLocked = LOCKED;
+	HMC5883L_Status_t readyOrLocked = LOCKED;
  8000d14:	2302      	movs	r3, #2
  8000d16:	f887 3028 	strb.w	r3, [r7, #40]	; 0x28
 
 	// wait until data registers are unlocked
 	while(readyOrLocked == LOCKED) {
- 8000d1a:	e017      	b.n	8000d4c <hmc5883l_read+0x44>
-		status = __getStatus(config, &readyOrLocked);
+ 8000d1a:	e017      	b.n	8000d4c <HMC5883L_Read+0x44>
+		status = __HMC5883L_GetStatus(config, &readyOrLocked);
  8000d1c:	f107 0328 	add.w	r3, r7, #40	; 0x28
  8000d20:	9300      	str	r3, [sp, #0]
  8000d22:	463b      	mov	r3, r7
  8000d24:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 8000d26:	f000 f95f 	bl	8000fe8 <__getStatus>
+ 8000d26:	f000 f95f 	bl	8000fe8 <__HMC5883L_GetStatus>
  8000d2a:	4603      	mov	r3, r0
  8000d2c:	f887 3029 	strb.w	r3, [r7, #41]	; 0x29
 		if(status != HAL_OK) return status;
  8000d30:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
  8000d34:	2b00      	cmp	r3, #0
- 8000d36:	d002      	beq.n	8000d3e <hmc5883l_read+0x36>
+ 8000d36:	d002      	beq.n	8000d3e <HMC5883L_Read+0x36>
  8000d38:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
- 8000d3c:	e0a6      	b.n	8000e8c <hmc5883l_read+0x184>
+ 8000d3c:	e0a6      	b.n	8000e8c <HMC5883L_Read+0x184>
 		if(readyOrLocked == LOCKED) HAL_Delay(10);
  8000d3e:	f897 3028 	ldrb.w	r3, [r7, #40]	; 0x28
  8000d42:	2b02      	cmp	r3, #2
- 8000d44:	d102      	bne.n	8000d4c <hmc5883l_read+0x44>
+ 8000d44:	d102      	bne.n	8000d4c <HMC5883L_Read+0x44>
  8000d46:	200a      	movs	r0, #10
  8000d48:	f000 fdb2 	bl	80018b0 <HAL_Delay>
 	while(readyOrLocked == LOCKED) {
  8000d4c:	f897 3028 	ldrb.w	r3, [r7, #40]	; 0x28
  8000d50:	2b02      	cmp	r3, #2
- 8000d52:	d0e3      	beq.n	8000d1c <hmc5883l_read+0x14>
+ 8000d52:	d0e3      	beq.n	8000d1c <HMC5883L_Read+0x14>
 	}
 
-	uint8_t addrsLow[3] = {DOX_L_ADDR, DOY_L_ADDR, DOZ_L_ADDR};
- 8000d54:	4a4f      	ldr	r2, [pc, #316]	; (8000e94 <hmc5883l_read+0x18c>)
+	uint8_t addrsLow[3] = {HMC5883L_REG_ADDR_X_L, HMC5883L_REG_ADDR_Y_L, HMC5883L_REG_ADDR_Z_L};
+ 8000d54:	4a4f      	ldr	r2, [pc, #316]	; (8000e94 <HMC5883L_Read+0x18c>)
  8000d56:	f107 0324 	add.w	r3, r7, #36	; 0x24
  8000d5a:	6812      	ldr	r2, [r2, #0]
  8000d5c:	4611      	mov	r1, r2
@@ -1139,8 +1139,8 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  8000d60:	3302      	adds	r3, #2
  8000d62:	0c12      	lsrs	r2, r2, #16
  8000d64:	701a      	strb	r2, [r3, #0]
-	uint8_t addrsHigh[3] = {DOX_H_ADDR, DOY_H_ADDR, DOZ_H_ADDR};
- 8000d66:	4a4c      	ldr	r2, [pc, #304]	; (8000e98 <hmc5883l_read+0x190>)
+	uint8_t addrsHigh[3] = {HMC5883L_REG_ADDR_X_H, HMC5883L_REG_ADDR_Y_H, HMC5883L_REG_ADDR_Z_H};
+ 8000d66:	4a4c      	ldr	r2, [pc, #304]	; (8000e98 <HMC5883L_Read+0x190>)
  8000d68:	f107 0320 	add.w	r3, r7, #32
  8000d6c:	6812      	ldr	r2, [r2, #0]
  8000d6e:	4611      	mov	r1, r2
@@ -1148,8 +1148,8 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  8000d72:	3302      	adds	r3, #2
  8000d74:	0c12      	lsrs	r2, r2, #16
  8000d76:	701a      	strb	r2, [r3, #0]
-	uint8_t axisArr[3] = {__X,__Y,__Z};
- 8000d78:	4a48      	ldr	r2, [pc, #288]	; (8000e9c <hmc5883l_read+0x194>)
+	uint8_t axisArr[3] = {__HMC5883L_AXIS_X,__HMC5883L_AXIS_Y,__HMC5883L_AXIS_Z};
+ 8000d78:	4a48      	ldr	r2, [pc, #288]	; (8000e9c <HMC5883L_Read+0x194>)
  8000d7a:	f107 031c 	add.w	r3, r7, #28
  8000d7e:	6812      	ldr	r2, [r2, #0]
  8000d80:	4611      	mov	r1, r2
@@ -1178,9 +1178,9 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 	for(int i=0; i<3; i++) {
  8000da8:	2300      	movs	r3, #0
  8000daa:	62fb      	str	r3, [r7, #44]	; 0x2c
- 8000dac:	e067      	b.n	8000e7e <hmc5883l_read+0x176>
+ 8000dac:	e067      	b.n	8000e7e <HMC5883L_Read+0x176>
 		// get most significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
  8000dae:	6838      	ldr	r0, [r7, #0]
  8000db0:	f107 0220 	add.w	r2, r7, #32
  8000db4:	6afb      	ldr	r3, [r7, #44]	; 0x2c
@@ -1201,11 +1201,11 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 		if(status != HAL_OK) return status;
  8000dda:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
  8000dde:	2b00      	cmp	r3, #0
- 8000de0:	d002      	beq.n	8000de8 <hmc5883l_read+0xe0>
+ 8000de0:	d002      	beq.n	8000de8 <HMC5883L_Read+0xe0>
  8000de2:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
- 8000de6:	e051      	b.n	8000e8c <hmc5883l_read+0x184>
+ 8000de6:	e051      	b.n	8000e8c <HMC5883L_Read+0x184>
 		// get less significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsLow[i], I2C_MEMADD_SIZE_8BIT, &dataLow, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, addrsLow[i], I2C_MEMADD_SIZE_8BIT, &dataLow, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
  8000de8:	6838      	ldr	r0, [r7, #0]
  8000dea:	f107 0224 	add.w	r2, r7, #36	; 0x24
  8000dee:	6afb      	ldr	r3, [r7, #44]	; 0x2c
@@ -1226,9 +1226,9 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 		if(status != HAL_OK) return status;
  8000e14:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
  8000e18:	2b00      	cmp	r3, #0
- 8000e1a:	d002      	beq.n	8000e22 <hmc5883l_read+0x11a>
+ 8000e1a:	d002      	beq.n	8000e22 <HMC5883L_Read+0x11a>
  8000e1c:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
- 8000e20:	e034      	b.n	8000e8c <hmc5883l_read+0x184>
+ 8000e20:	e034      	b.n	8000e8c <HMC5883L_Read+0x184>
 
 		axisData = dataHigh;
  8000e22:	7efb      	ldrb	r3, [r7, #27]
@@ -1256,7 +1256,7 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  8000e4a:	b29b      	uxth	r3, r3
  8000e4c:	857b      	strh	r3, [r7, #42]	; 0x2a
 
-		status = __setDataAxis(data, axisArr[i], axisData);
+		status = __HMC5883L_SetDataAxis(data, axisArr[i], axisData);
  8000e4e:	f107 021c 	add.w	r2, r7, #28
  8000e52:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8000e54:	4413      	add	r3, r2
@@ -1264,27 +1264,27 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  8000e58:	f9b7 202a 	ldrsh.w	r2, [r7, #42]	; 0x2a
  8000e5c:	4619      	mov	r1, r3
  8000e5e:	6c38      	ldr	r0, [r7, #64]	; 0x40
- 8000e60:	f000 f860 	bl	8000f24 <__setDataAxis>
+ 8000e60:	f000 f860 	bl	8000f24 <__HMC5883L_SetDataAxis>
  8000e64:	4603      	mov	r3, r0
  8000e66:	f887 3029 	strb.w	r3, [r7, #41]	; 0x29
 		if(status != HAL_OK) return status;
  8000e6a:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
  8000e6e:	2b00      	cmp	r3, #0
- 8000e70:	d002      	beq.n	8000e78 <hmc5883l_read+0x170>
+ 8000e70:	d002      	beq.n	8000e78 <HMC5883L_Read+0x170>
  8000e72:	f897 3029 	ldrb.w	r3, [r7, #41]	; 0x29
- 8000e76:	e009      	b.n	8000e8c <hmc5883l_read+0x184>
+ 8000e76:	e009      	b.n	8000e8c <HMC5883L_Read+0x184>
 	for(int i=0; i<3; i++) {
  8000e78:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8000e7a:	3301      	adds	r3, #1
  8000e7c:	62fb      	str	r3, [r7, #44]	; 0x2c
  8000e7e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
  8000e80:	2b02      	cmp	r3, #2
- 8000e82:	dd94      	ble.n	8000dae <hmc5883l_read+0xa6>
+ 8000e82:	dd94      	ble.n	8000dae <HMC5883L_Read+0xa6>
 	}
 
-	__setDataAngles(data);
+	__HMC5883L_SetDataAngles(data);
  8000e84:	6c38      	ldr	r0, [r7, #64]	; 0x40
- 8000e86:	f000 f877 	bl	8000f78 <__setDataAngles>
+ 8000e86:	f000 f877 	bl	8000f78 <__HMC5883L_SetDataAngles>
 
 	return HAL_OK;
  8000e8a:	2300      	movs	r3, #0
@@ -1297,9 +1297,13 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  8000e98:	08005404 	.word	0x08005404
  8000e9c:	08005408 	.word	0x08005408
 
-08000ea0 <hmc5883l_getCalibrationData>:
-
-void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *huart) {
+08000ea0 <HMC5883L_GetCalibrationData>:
+/**
+ * Creates CSV format data, with collected points of x, y and z data. This data can be used with other software,
+ * such as Matlab, Excel, R, etc, to get the center point of the measured data and apply the found offsets to the
+ * HMC5883LCalibration_t in the HMC5883LConfig_t struct.
+ */
+void HMC5883L_GetCalibrationData(HMC5883L_Config_t config, UART_HandleTypeDef *huart) {
  8000ea0:	b590      	push	{r4, r7, lr}
  8000ea2:	b093      	sub	sp, #76	; 0x4c
  8000ea4:	af02      	add	r7, sp, #8
@@ -1308,7 +1312,7 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
 	volatile int32_t num_collected = 0;
  8000eac:	2300      	movs	r3, #0
  8000eae:	63fb      	str	r3, [r7, #60]	; 0x3c
-	HMC5883LData_t data = {0,0,0,0,0};
+	HMC5883L_Data_t data = {0,0,0,0,0};
  8000eb0:	f107 032c 	add.w	r3, r7, #44	; 0x2c
  8000eb4:	2200      	movs	r2, #0
  8000eb6:	601a      	str	r2, [r3, #0]
@@ -1318,13 +1322,13 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
 	char transmitStr[22];
 
 	while(num_collected < 2000) {
- 8000ebe:	e026      	b.n	8000f0e <hmc5883l_getCalibrationData+0x6e>
-		hmc5883l_read(config, &data);
+ 8000ebe:	e026      	b.n	8000f0e <HMC5883L_GetCalibrationData+0x6e>
+		HMC5883L_Read(config, &data);
  8000ec0:	f107 032c 	add.w	r3, r7, #44	; 0x2c
  8000ec4:	9300      	str	r3, [sp, #0]
  8000ec6:	463b      	mov	r3, r7
  8000ec8:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 8000eca:	f7ff ff1d 	bl	8000d08 <hmc5883l_read>
+ 8000eca:	f7ff ff1d 	bl	8000d08 <HMC5883L_Read>
 		sprintf(transmitStr,"%i, %i, %i\n", data.x, data.y, data.z);
  8000ece:	8dbb      	ldrh	r3, [r7, #44]	; 0x2c
  8000ed0:	461a      	mov	r2, r3
@@ -1334,7 +1338,7 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
  8000ed8:	f107 0014 	add.w	r0, r7, #20
  8000edc:	9300      	str	r3, [sp, #0]
  8000ede:	460b      	mov	r3, r1
- 8000ee0:	490f      	ldr	r1, [pc, #60]	; (8000f20 <hmc5883l_getCalibrationData+0x80>)
+ 8000ee0:	490f      	ldr	r1, [pc, #60]	; (8000f20 <HMC5883L_GetCalibrationData+0x80>)
  8000ee2:	f003 fd0b 	bl	80048fc <siprintf>
 
 		HAL_UART_Transmit(huart, (uint8_t*)transmitStr, strlen(transmitStr), HAL_MAX_DELAY);
@@ -1357,7 +1361,7 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
 	while(num_collected < 2000) {
  8000f0e:	6bfb      	ldr	r3, [r7, #60]	; 0x3c
  8000f10:	f5b3 6ffa 	cmp.w	r3, #2000	; 0x7d0
- 8000f14:	dbd4      	blt.n	8000ec0 <hmc5883l_getCalibrationData+0x20>
+ 8000f14:	dbd4      	blt.n	8000ec0 <HMC5883L_GetCalibrationData+0x20>
 	}
 }
  8000f16:	bf00      	nop
@@ -1367,10 +1371,10 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
  8000f1e:	bd90      	pop	{r4, r7, pc}
  8000f20:	0800540c 	.word	0x0800540c
 
-08000f24 <__setDataAxis>:
+08000f24 <__HMC5883L_SetDataAxis>:
 
 
-HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData) {
+HAL_StatusTypeDef __HMC5883L_SetDataAxis(HMC5883L_Data_t *data, uint8_t axis, int16_t axisData) {
  8000f24:	b480      	push	{r7}
  8000f26:	b083      	sub	sp, #12
  8000f28:	af00      	add	r7, sp, #0
@@ -1382,38 +1386,38 @@ HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axis
 	switch(axis) {
  8000f34:	78fb      	ldrb	r3, [r7, #3]
  8000f36:	2b02      	cmp	r3, #2
- 8000f38:	d010      	beq.n	8000f5c <__setDataAxis+0x38>
+ 8000f38:	d010      	beq.n	8000f5c <__HMC5883L_SetDataAxis+0x38>
  8000f3a:	2b02      	cmp	r3, #2
- 8000f3c:	dc13      	bgt.n	8000f66 <__setDataAxis+0x42>
+ 8000f3c:	dc13      	bgt.n	8000f66 <__HMC5883L_SetDataAxis+0x42>
  8000f3e:	2b00      	cmp	r3, #0
- 8000f40:	d002      	beq.n	8000f48 <__setDataAxis+0x24>
+ 8000f40:	d002      	beq.n	8000f48 <__HMC5883L_SetDataAxis+0x24>
  8000f42:	2b01      	cmp	r3, #1
- 8000f44:	d005      	beq.n	8000f52 <__setDataAxis+0x2e>
- 8000f46:	e00e      	b.n	8000f66 <__setDataAxis+0x42>
-		case __X:
+ 8000f44:	d005      	beq.n	8000f52 <__HMC5883L_SetDataAxis+0x2e>
+ 8000f46:	e00e      	b.n	8000f66 <__HMC5883L_SetDataAxis+0x42>
+		case __HMC5883L_AXIS_X:
 			data->x = axisData;
  8000f48:	883a      	ldrh	r2, [r7, #0]
  8000f4a:	687b      	ldr	r3, [r7, #4]
  8000f4c:	801a      	strh	r2, [r3, #0]
 			return HAL_OK;
  8000f4e:	2300      	movs	r3, #0
- 8000f50:	e00a      	b.n	8000f68 <__setDataAxis+0x44>
-		case __Y:
+ 8000f50:	e00a      	b.n	8000f68 <__HMC5883L_SetDataAxis+0x44>
+		case __HMC5883L_AXIS_Y:
 			data->y = axisData;
  8000f52:	883a      	ldrh	r2, [r7, #0]
  8000f54:	687b      	ldr	r3, [r7, #4]
  8000f56:	805a      	strh	r2, [r3, #2]
 			return HAL_OK;
  8000f58:	2300      	movs	r3, #0
- 8000f5a:	e005      	b.n	8000f68 <__setDataAxis+0x44>
-		case __Z:
+ 8000f5a:	e005      	b.n	8000f68 <__HMC5883L_SetDataAxis+0x44>
+		case __HMC5883L_AXIS_Z:
 			data->z = axisData;
  8000f5c:	883a      	ldrh	r2, [r7, #0]
  8000f5e:	687b      	ldr	r3, [r7, #4]
  8000f60:	809a      	strh	r2, [r3, #4]
 			return HAL_OK;
  8000f62:	2300      	movs	r3, #0
- 8000f64:	e000      	b.n	8000f68 <__setDataAxis+0x44>
+ 8000f64:	e000      	b.n	8000f68 <__HMC5883L_SetDataAxis+0x44>
 		default:
 			return HAL_ERROR;
  8000f66:	2301      	movs	r3, #1
@@ -1427,9 +1431,9 @@ HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axis
  8000f74:	0000      	movs	r0, r0
 	...
 
-08000f78 <__setDataAngles>:
+08000f78 <__HMC5883L_SetDataAngles>:
 
-void __setDataAngles(HMC5883LData_t *data) {
+void __HMC5883L_SetDataAngles(HMC5883L_Data_t *data) {
  8000f78:	b580      	push	{r7, lr}
  8000f7a:	b082      	sub	sp, #8
  8000f7c:	af00      	add	r7, sp, #0
@@ -1454,7 +1458,7 @@ void __setDataAngles(HMC5883LData_t *data) {
  8000fb0:	68db      	ldr	r3, [r3, #12]
  8000fb2:	4618      	mov	r0, r3
  8000fb4:	f7ff fc12 	bl	80007dc <__aeabi_f2d>
- 8000fb8:	a309      	add	r3, pc, #36	; (adr r3, 8000fe0 <__setDataAngles+0x68>)
+ 8000fb8:	a309      	add	r3, pc, #36	; (adr r3, 8000fe0 <__HMC5883L_SetDataAngles+0x68>)
  8000fba:	e9d3 2300 	ldrd	r2, r3, [r3]
  8000fbe:	f7ff f97f 	bl	80002c0 <__aeabi_dmul>
  8000fc2:	4602      	mov	r2, r0
@@ -1474,9 +1478,9 @@ void __setDataAngles(HMC5883LData_t *data) {
  8000fe0:	1a63c1f8 	.word	0x1a63c1f8
  8000fe4:	404ca5dc 	.word	0x404ca5dc
 
-08000fe8 <__getStatus>:
+08000fe8 <__HMC5883L_GetStatus>:
 
-HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus) {
+HAL_StatusTypeDef __HMC5883L_GetStatus(HMC5883L_Config_t config, HMC5883L_Status_t *registerStatus) {
  8000fe8:	b590      	push	{r4, r7, lr}
  8000fea:	b08b      	sub	sp, #44	; 0x2c
  8000fec:	af04      	add	r7, sp, #16
@@ -1487,7 +1491,7 @@ HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus)
  8000ff4:	2300      	movs	r3, #0
  8000ff6:	75bb      	strb	r3, [r7, #22]
 
-	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, STATUS_REGISTER_ADDR, I2C_MEMADD_SIZE_8BIT, &statusRegisterData, 1, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_STATUS, I2C_MEMADD_SIZE_8BIT, &statusRegisterData, 1, HAL_MAX_DELAY);
  8000ff8:	6838      	ldr	r0, [r7, #0]
  8000ffa:	f04f 33ff 	mov.w	r3, #4294967295
  8000ffe:	9302      	str	r3, [sp, #8]
@@ -1504,9 +1508,9 @@ HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus)
 	if(status != HAL_OK) return status;
  8001018:	7dfb      	ldrb	r3, [r7, #23]
  800101a:	2b00      	cmp	r3, #0
- 800101c:	d001      	beq.n	8001022 <__getStatus+0x3a>
+ 800101c:	d001      	beq.n	8001022 <__HMC5883L_GetStatus+0x3a>
  800101e:	7dfb      	ldrb	r3, [r7, #23]
- 8001020:	e011      	b.n	8001046 <__getStatus+0x5e>
+ 8001020:	e011      	b.n	8001046 <__HMC5883L_GetStatus+0x5e>
 
 	// clear the six most significant bits, since they are not used
 	statusRegisterData &= 0b00000011;
@@ -1524,12 +1528,12 @@ HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus)
 	return (statusRegisterData == READY || statusRegisterData == LOCKED) ? HAL_OK : HAL_ERROR;
  8001032:	7dbb      	ldrb	r3, [r7, #22]
  8001034:	2b01      	cmp	r3, #1
- 8001036:	d004      	beq.n	8001042 <__getStatus+0x5a>
+ 8001036:	d004      	beq.n	8001042 <__HMC5883L_GetStatus+0x5a>
  8001038:	7dbb      	ldrb	r3, [r7, #22]
  800103a:	2b02      	cmp	r3, #2
- 800103c:	d001      	beq.n	8001042 <__getStatus+0x5a>
+ 800103c:	d001      	beq.n	8001042 <__HMC5883L_GetStatus+0x5a>
  800103e:	2301      	movs	r3, #1
- 8001040:	e000      	b.n	8001044 <__getStatus+0x5c>
+ 8001040:	e000      	b.n	8001044 <__HMC5883L_GetStatus+0x5c>
  8001042:	2300      	movs	r3, #0
  8001044:	b2db      	uxtb	r3, r3
 }
@@ -1577,7 +1581,7 @@ int main(void)
   MX_USART2_UART_Init();
  800106a:	f000 f959 	bl	8001320 <MX_USART2_UART_Init>
   /* USER CODE BEGIN 2 */
-  ServoTimerConfig_t servoPWMConfig;
+  SERVO_TimerConfig_t servoPWMConfig;
   servoPWMConfig.handle = htim3;
  800106e:	4a31      	ldr	r2, [pc, #196]	; (8001134 <main+0xe4>)
  8001070:	f107 0388 	add.w	r3, r7, #136	; 0x88
@@ -1598,7 +1602,7 @@ int main(void)
  8001092:	4b2a      	ldr	r3, [pc, #168]	; (800113c <main+0xec>)
  8001094:	f8c7 30dc 	str.w	r3, [r7, #220]	; 0xdc
 
-  ServoCalibration_t servoCalibration;
+  SERVO_Calibration_t servoCalibration;
   servoCalibration.gain = SERVO_CALIBRATION_GAIN;
  8001098:	4b29      	ldr	r3, [pc, #164]	; (8001140 <main+0xf0>)
  800109a:	f8c7 3084 	str.w	r3, [r7, #132]	; 0x84
@@ -1606,7 +1610,7 @@ int main(void)
  800109e:	4b29      	ldr	r3, [pc, #164]	; (8001144 <main+0xf4>)
  80010a0:	f8c7 3080 	str.w	r3, [r7, #128]	; 0x80
 
-  ServoConfig_t servoConfig;
+  SERVO_Config_t servoConfig;
   servoConfig.timerConfig = servoPWMConfig;
  80010a4:	f107 0320 	add.w	r3, r7, #32
  80010a8:	f107 0188 	add.w	r1, r7, #136	; 0x88
@@ -1619,37 +1623,37 @@ int main(void)
  80010bc:	e892 0003 	ldmia.w	r2, {r0, r1}
  80010c0:	e883 0003 	stmia.w	r3, {r0, r1}
 
-  HMC5883LConfig_t magnetometerConfig;
-  magnetometerConfig.dataOutputRate = DOR_15;
+  HMC5883L_Config_t magnetometerConfig;
+  magnetometerConfig.dataOutputRate = HMC5883L_DOR_15;
  80010c4:	2304      	movs	r3, #4
  80010c6:	757b      	strb	r3, [r7, #21]
-  magnetometerConfig.gain = GAIN_0_88;
+  magnetometerConfig.gain = HMC5883L_GAIN_0_88;
  80010c8:	2300      	movs	r3, #0
  80010ca:	75fb      	strb	r3, [r7, #23]
-  magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
+  magnetometerConfig.measurementMode = HMC5883L_MESUAREMENT_NORMAL;
  80010cc:	2300      	movs	r3, #0
  80010ce:	75bb      	strb	r3, [r7, #22]
-  magnetometerConfig.operatingMode = CONTINUOUS_MODE;
+  magnetometerConfig.operatingMode = HMC5883L_CONTINUOUS_MODE;
  80010d0:	2300      	movs	r3, #0
  80010d2:	763b      	strb	r3, [r7, #24]
-  magnetometerConfig.samplesNum = SAMPLES_8;
+  magnetometerConfig.samplesNum = HMC5883L_SAMPLES_8;
  80010d4:	2303      	movs	r3, #3
  80010d6:	753b      	strb	r3, [r7, #20]
   magnetometerConfig.handle = &hi2c1;
  80010d8:	4b1b      	ldr	r3, [pc, #108]	; (8001148 <main+0xf8>)
  80010da:	613b      	str	r3, [r7, #16]
-  hmc5883l_init(magnetometerConfig);
+  HMC5883L_Init(magnetometerConfig);
  80010dc:	f107 0310 	add.w	r3, r7, #16
  80010e0:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 80010e2:	f7ff fda1 	bl	8000c28 <hmc5883l_init>
-  hmc5883l_getCalibrationData(magnetometerConfig, &huart2);
+ 80010e2:	f7ff fda1 	bl	8000c28 <HMC5883L_Init>
+  HMC5883L_GetCalibrationData(magnetometerConfig, &huart2);
  80010e6:	4b19      	ldr	r3, [pc, #100]	; (800114c <main+0xfc>)
  80010e8:	9300      	str	r3, [sp, #0]
  80010ea:	f107 0310 	add.w	r3, r7, #16
  80010ee:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 80010f0:	f7ff fed6 	bl	8000ea0 <hmc5883l_getCalibrationData>
+ 80010f0:	f7ff fed6 	bl	8000ea0 <HMC5883L_GetCalibrationData>
 
-  HMC5883LData_t magnetometerData = {0,0,0,0,0};
+  HMC5883L_Data_t magnetometerData = {0,0,0,0,0};
  80010f4:	463b      	mov	r3, r7
  80010f6:	2200      	movs	r2, #0
  80010f8:	601a      	str	r2, [r3, #0]
@@ -1674,16 +1678,16 @@ int main(void)
 //	setServoPWMAngle(servoConfig, pwmServoValue);
 //	HAL_Delay(500);
 
-	hmc5883l_read(magnetometerConfig, &magnetometerData);
+	HMC5883L_Read(magnetometerConfig, &magnetometerData);
  800111c:	463b      	mov	r3, r7
  800111e:	9300      	str	r3, [sp, #0]
  8001120:	f107 0310 	add.w	r3, r7, #16
  8001124:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 8001126:	f7ff fdef 	bl	8000d08 <hmc5883l_read>
+ 8001126:	f7ff fdef 	bl	8000d08 <HMC5883L_Read>
 	HAL_Delay(500);
  800112a:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  800112e:	f000 fbbf 	bl	80018b0 <HAL_Delay>
-	hmc5883l_read(magnetometerConfig, &magnetometerData);
+	HMC5883L_Read(magnetometerConfig, &magnetometerData);
  8001132:	e7f3      	b.n	800111c <main+0xcc>
  8001134:	200000cc 	.word	0x200000cc
  8001138:	3d4ccccd 	.word	0x3d4ccccd

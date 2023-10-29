@@ -120,11 +120,11 @@ int main(void)
   servoConfig.calibration = servoCalibration;
 
   HMC5883L_Config_t magnetometerConfig;
-  magnetometerConfig.dataOutputRate = DOR_15;
-  magnetometerConfig.gain = GAIN_0_88;
-  magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
-  magnetometerConfig.operatingMode = CONTINUOUS_MODE;
-  magnetometerConfig.samplesNum = SAMPLES_8;
+  magnetometerConfig.dataOutputRate = HMC5883L_DOR_15;
+  magnetometerConfig.gain = HMC5883L_GAIN_0_88;
+  magnetometerConfig.measurementMode = HMC5883L_MESUAREMENT_NORMAL;
+  magnetometerConfig.operatingMode = HMC5883L_CONTINUOUS_MODE;
+  magnetometerConfig.samplesNum = HMC5883L_SAMPLES_8;
   magnetometerConfig.handle = &hi2c1;
   HMC5883L_Init(magnetometerConfig);
   HMC5883L_GetCalibrationData(magnetometerConfig, &huart2);
