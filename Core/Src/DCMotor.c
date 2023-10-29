@@ -13,5 +13,5 @@ void DCMOTOR_SetSpeedPercentage(DCMOTOR_TimerConfig_t timerConfig, float percent
 	uint16_t pulseLength = percentage * timerConfig.period;
 	if (pulseLength < minPercent) pulseLength = 0;
 	if (pulseLength > maxPulseLength) pulseLength = maxPulseLength;
-	setPWM(timerConfig.handle, timerConfig.channel, timerConfig.period, pulseLength);
+	PWM_SetValue(timerConfig.handle, timerConfig.channel, timerConfig.period, pulseLength);
 }

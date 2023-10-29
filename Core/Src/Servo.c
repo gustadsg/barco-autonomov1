@@ -18,7 +18,7 @@ void SERVO_SetAngle(SERVO_Config_t servoConfig, float angle) {
 
 	float convertedToPWM = __SERVO_ConvertScales(angleScale, pwmScale,
 			__SERVO_GetCalibratedAngle(servoConfig.calibration, angle));
-	setPWM(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
+	PWM_SetValue(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
@@ -31,7 +31,7 @@ void SERVO_SetPercentage(SERVO_Config_t servoConfig, float angle) {
 
 	float convertedToPWM = __SERVO_ConvertScales(angleScale, pwmScale,
 			__SERVO_GetCalibratedAngle(servoConfig.calibration, angle));
-	setPWM(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
+	PWM_SetValue(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
