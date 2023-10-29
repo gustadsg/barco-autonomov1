@@ -119,17 +119,17 @@ int main(void)
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
 
-  HMC5883LConfig_t magnetometerConfig;
+  HMC5883L_Config_t magnetometerConfig;
   magnetometerConfig.dataOutputRate = DOR_15;
   magnetometerConfig.gain = GAIN_0_88;
   magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
   magnetometerConfig.operatingMode = CONTINUOUS_MODE;
   magnetometerConfig.samplesNum = SAMPLES_8;
   magnetometerConfig.handle = &hi2c1;
-  hmc5883l_init(magnetometerConfig);
-  hmc5883l_getCalibrationData(magnetometerConfig, &huart2);
+  HMC5883L_Init(magnetometerConfig);
+  HMC5883L_GetCalibrationData(magnetometerConfig, &huart2);
 
-  HMC5883LData_t magnetometerData = {0,0,0,0,0};
+  HMC5883L_Data_t magnetometerData = {0,0,0,0,0};
 
   const int servoMin = SERVO_MIN_ANGLE;
   const int servoMax = SERVO_MAX_ANGLE;
@@ -151,7 +151,7 @@ int main(void)
 //	setServoPWMAngle(servoConfig, pwmServoValue);
 //	HAL_Delay(500);
 
-	hmc5883l_read(magnetometerConfig, &magnetometerData);
+	HMC5883L_Read(magnetometerConfig, &magnetometerData);
 	HAL_Delay(500);
 
   }

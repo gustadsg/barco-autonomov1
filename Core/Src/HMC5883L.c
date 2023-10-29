@@ -7,8 +7,8 @@
 
 #include "HMC5883L.h"
 
-HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
-	uint8_t registerA = CRA7;
+HAL_StatusTypeDef HMC5883L_Init(HMC5883L_Config_t config) {
+	uint8_t registerA = HMC5883L_REG_BIT_CRA7;
 	registerA <<= 2;
 	registerA |= config.samplesNum;
 	registerA <<= 3;
@@ -24,30 +24,30 @@ HAL_StatusTypeDef hmc5883l_init(HMC5883LConfig_t config) {
 
 	HAL_StatusTypeDef status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_A_ADDR, I2C_MEMADD_SIZE_8BIT, &registerA, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_A, I2C_MEMADD_SIZE_8BIT, &registerA, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_B_ADDR, I2C_MEMADD_SIZE_8BIT, &registerB, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_B, I2C_MEMADD_SIZE_8BIT, &registerB, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
-	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_WRITE_ADDR, REGISTER_MODE_ADDR, I2C_MEMADD_SIZE_8BIT, &registerMode, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Write(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_MODE, I2C_MEMADD_SIZE_8BIT, &registerMode, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 	return status;
 }
 
-HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
+HAL_StatusTypeDef HMC5883L_Read(HMC5883L_Config_t config, HMC5883L_Data_t *data) {
 	HAL_StatusTypeDef status;
-	Status_t readyOrLocked = LOCKED;
+	HMC5883L_Status_t readyOrLocked = LOCKED;
 
 	// wait until data registers are unlocked
 	while(readyOrLocked == LOCKED) {
-		status = __getStatus(config, &readyOrLocked);
+		status = __HMC5883L_GetStatus(config, &readyOrLocked);
 		if(status != HAL_OK) return status;
 		if(readyOrLocked == LOCKED) HAL_Delay(10);
 	}
 
-	uint8_t addrsLow[3] = {DOX_L_ADDR, DOY_L_ADDR, DOZ_L_ADDR};
-	uint8_t addrsHigh[3] = {DOX_H_ADDR, DOY_H_ADDR, DOZ_H_ADDR};
-	uint8_t axisArr[3] = {__X,__Y,__Z};
+	uint8_t addrsLow[3] = {HMC5883L_REG_ADDR_X_L, HMC5883L_REG_ADDR_Y_L, HMC5883L_REG_ADDR_Z_L};
+	uint8_t addrsHigh[3] = {HMC5883L_REG_ADDR_X_H, HMC5883L_REG_ADDR_Y_H, HMC5883L_REG_ADDR_Z_H};
+	uint8_t axisArr[3] = {__HMC5883L_AXIS_X,__HMC5883L_AXIS_Y,__HMC5883L_AXIS_Z};
 
 	uint8_t dataHigh = 0, dataLow = 0;
 	int16_t axisData = 0;
@@ -56,10 +56,10 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 
 	for(int i=0; i<3; i++) {
 		// get most significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, addrsHigh[i], I2C_MEMADD_SIZE_8BIT, &dataHigh, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
 		// get less significant bits
-		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, addrsLow[i], I2C_MEMADD_SIZE_8BIT, &dataLow, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
+		status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, addrsLow[i], I2C_MEMADD_SIZE_8BIT, &dataLow, HMC5883L_BYTE_SZ, HAL_MAX_DELAY);
 		if(status != HAL_OK) return status;
 
 		axisData = dataHigh;
@@ -68,11 +68,11 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
 
 		axisData += offsetData[i];
 
-		status = __setDataAxis(data, axisArr[i], axisData);
+		status = __HMC5883L_SetDataAxis(data, axisArr[i], axisData);
 		if(status != HAL_OK) return status;
 	}
 
-	__setDataAngles(data);
+	__HMC5883L_SetDataAngles(data);
 
 	return HAL_OK;
 }
@@ -82,13 +82,13 @@ HAL_StatusTypeDef hmc5883l_read(HMC5883LConfig_t config, HMC5883LData_t *data) {
  * such as Matlab, Excel, R, etc, to get the center point of the measured data and apply the found offsets to the
  * HMC5883LCalibration_t in the HMC5883LConfig_t struct.
  */
-void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *huart) {
+void HMC5883L_GetCalibrationData(HMC5883L_Config_t config, UART_HandleTypeDef *huart) {
 	volatile int32_t num_collected = 0;
-	HMC5883LData_t data = {0,0,0,0,0};
+	HMC5883L_Data_t data = {0,0,0,0,0};
 	char transmitStr[22];
 
 	while(num_collected < 2000) {
-		hmc5883l_read(config, &data);
+		HMC5883L_Read(config, &data);
 		sprintf(transmitStr,"%i, %i, %i\n", data.x, data.y, data.z);
 
 		HAL_UART_Transmit(huart, (uint8_t*)transmitStr, strlen(transmitStr), HAL_MAX_DELAY);
@@ -98,15 +98,15 @@ void hmc5883l_getCalibrationData(HMC5883LConfig_t config, UART_HandleTypeDef *hu
 }
 
 
-HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axisData) {
+HAL_StatusTypeDef __HMC5883L_SetDataAxis(HMC5883L_Data_t *data, uint8_t axis, int16_t axisData) {
 	switch(axis) {
-		case __X:
+		case __HMC5883L_AXIS_X:
 			data->x = axisData;
 			return HAL_OK;
-		case __Y:
+		case __HMC5883L_AXIS_Y:
 			data->y = axisData;
 			return HAL_OK;
-		case __Z:
+		case __HMC5883L_AXIS_Z:
 			data->z = axisData;
 			return HAL_OK;
 		default:
@@ -114,16 +114,16 @@ HAL_StatusTypeDef __setDataAxis(HMC5883LData_t *data, uint8_t axis, int16_t axis
 	}
 }
 
-void __setDataAngles(HMC5883LData_t *data) {
+void __HMC5883L_SetDataAngles(HMC5883L_Data_t *data) {
 	data->radians = atan2f(data->x, data->y);
 	data->degrees = data->radians * (180.0/M_PI);
 }
 
-HAL_StatusTypeDef __getStatus(HMC5883LConfig_t config, Status_t *registerStatus) {
+HAL_StatusTypeDef __HMC5883L_GetStatus(HMC5883L_Config_t config, HMC5883L_Status_t *registerStatus) {
 	HAL_StatusTypeDef status;
 	uint8_t statusRegisterData = 0;
 
-	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_READ_ADDR, STATUS_REGISTER_ADDR, I2C_MEMADD_SIZE_8BIT, &statusRegisterData, 1, HAL_MAX_DELAY);
+	status = HAL_I2C_Mem_Read(config.handle, HMC5883L_DEVICE_ADDR, HMC5883L_REG_ADDR_STATUS, I2C_MEMADD_SIZE_8BIT, &statusRegisterData, 1, HAL_MAX_DELAY);
 	if(status != HAL_OK) return status;
 
 	// clear the six most significant bits, since they are not used
