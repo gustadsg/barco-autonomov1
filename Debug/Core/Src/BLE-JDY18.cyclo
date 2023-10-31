@@ -7,4 +7,5 @@
 ../Core/Src/BLE-JDY18.c:53:6:JDY18_SetRole	1
 ../Core/Src/BLE-JDY18.c:60:6:JDY18_SetBaudRate	1
 ../Core/Src/BLE-JDY18.c:68:6:JDY18_Scan	1
-../Core/Src/BLE-JDY18.c:78:6:_getDevicesFromScanStr	5
+../Core/Src/BLE-JDY18.c:79:6:__JDY18_GetDistanceFromRssi	2
+../Core/Src/BLE-JDY18.c:85:5:__JDY18_GetDevicesFromScanStr	5

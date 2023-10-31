@@ -72,10 +72,17 @@ void JDY18_Scan(JDY18_Device_t *devices) {
 	JDY18_SendCommand("IQN", "");
 	HAL_UART_Receive(husart, (uint8_t*) data, JDY18_BUFFER_SZ, 1000);
 
-	_getDevicesFromScanStr(data, devices, JDY18_MAX_DEVICES);
+	int numDevices = __JDY18_GetDevicesFromScanStr(data, devices, JDY18_MAX_DEVICES);
+	__JDY18_GetDistanceFromRssi(devices, numDevices);
 }
 
-void _getDevicesFromScanStr(char* str, JDY18_Device_t *devices, int8_t maxDevices) {
+void __JDY18_GetDistanceFromRssi(JDY18_Device_t *devices, int8_t numDevices) {
+	for(int i=0; i<numDevices; i++) {
+		devices[i].distance = pow(10, (JDY18_DEFAULT_POWER-devices[i].rssi)/(JDY18_N*10));
+	}
+}
+
+int __JDY18_GetDevicesFromScanStr(char* str, JDY18_Device_t *devices, int8_t maxDevices) {
 	char inputCopy[JDY18_BUFFER_SZ];
 	strcpy(inputCopy, str);
 
@@ -103,4 +110,6 @@ void _getDevicesFromScanStr(char* str, JDY18_Device_t *devices, int8_t maxDevice
 		}
 		token = strtok(NULL, "\r\n");
 	}
+
+	return deviceCount;
 }
