@@ -17,8 +17,8 @@ typedef struct {
 	TIM_HandleTypeDef handle;
 	uint32_t channel;
 	uint32_t period;
-} DCMotorTimerConfig_t;
+} DCMOTOR_TimerConfig_t;
 
-void setDCMotorPWMPercentage(DCMotorTimerConfig_t timerConfig, float percentage);
+void DCMOTOR_SetSpeedPercentage(DCMOTOR_TimerConfig_t timerConfig, float percentage);
 
 #endif /* INC_DCMOTOR_H_ */

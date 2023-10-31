@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
 
-void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
+void PWM_SetValue(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
 		uint16_t pulseLength);
 
 #endif /* INC_PWM_ */

@@ -7,43 +7,43 @@
 
 #include "Servo.h"
 
-void setServoPWMAngle(ServoConfig_t servoConfig, float angle) {
-	Scale_t angleScale;
+void SERVO_SetAngle(SERVO_Config_t servoConfig, float angle) {
+	SERVO_Scale_t angleScale;
 	angleScale.min = SERVO_MIN_ANGLE
 	;
 	angleScale.max = SERVO_MAX_ANGLE
 	;
 
-	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
+	SERVO_Scale_t pwmScale = __SERVO_GetPWMScale(servoConfig.timerConfig);
 
-	float convertedToPWM = __convertScales(angleScale, pwmScale,
-			__getCalibratedAngle(servoConfig.calibration, angle));
-	setPWM(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
+	float convertedToPWM = __SERVO_ConvertScales(angleScale, pwmScale,
+			__SERVO_GetCalibratedAngle(servoConfig.calibration, angle));
+	PWM_SetValue(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-void setServoPWMPercentage(ServoConfig_t servoConfig, float angle) {
-	Scale_t angleScale;
+void SERVO_SetPercentage(SERVO_Config_t servoConfig, float angle) {
+	SERVO_Scale_t angleScale;
 	angleScale.min = SERVO_MIN_PERCENT;
 	angleScale.max = SERVO_MAX_PERCENT;
 
-	Scale_t pwmScale = __getPWMScale(servoConfig.timerConfig);
+	SERVO_Scale_t pwmScale = __SERVO_GetPWMScale(servoConfig.timerConfig);
 
-	float convertedToPWM = __convertScales(angleScale, pwmScale,
-			__getCalibratedAngle(servoConfig.calibration, angle));
-	setPWM(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
+	float convertedToPWM = __SERVO_ConvertScales(angleScale, pwmScale,
+			__SERVO_GetCalibratedAngle(servoConfig.calibration, angle));
+	PWM_SetValue(servoConfig.timerConfig.handle, servoConfig.timerConfig.channel,
 			servoConfig.timerConfig.period, convertedToPWM);
 }
 
-Scale_t __getPWMScale(ServoTimerConfig_t timerConfig) {
-	Scale_t pwmScale;
+SERVO_Scale_t __SERVO_GetPWMScale(SERVO_TimerConfig_t timerConfig) {
+	SERVO_Scale_t pwmScale;
 	pwmScale.min = timerConfig.minDutyCyclePercentage * timerConfig.period;
 	pwmScale.max = timerConfig.maxDutyCyclePercentage * timerConfig.period;
 
 	return pwmScale;
 }
 
-float __convertScales(Scale_t from, Scale_t to, float point) {
+float __SERVO_ConvertScales(SERVO_Scale_t from, SERVO_Scale_t to, float point) {
 	float deltaScaleFrom = from.max - from.min;
 	float deltaScaleTo = to.max - to.min;
 
@@ -59,6 +59,6 @@ float __convertScales(Scale_t from, Scale_t to, float point) {
 /*
  * Foi observado que há imprecisões no servo motor, de forma a ser necessário ajustar o valor enviado conforme a reta de calibração obtida
  */
-float __getCalibratedAngle(ServoCalibration_t calibration, float desiredAngle) {
+float __SERVO_GetCalibratedAngle(SERVO_Calibration_t calibration, float desiredAngle) {
 	return calibration.gain * desiredAngle + calibration.offset; // y = a*x + b
 }

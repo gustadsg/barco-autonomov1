@@ -226,23 +226,29 @@ Discarded input sections
  .data          0x0000000000000000        0x0 ./Core/Src/BLE-JDY18.o
  .bss           0x0000000000000000        0x0 ./Core/Src/BLE-JDY18.o
  .bss.husart    0x0000000000000000        0x4 ./Core/Src/BLE-JDY18.o
- .text.setup    0x0000000000000000       0x20 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_Setup
+                0x0000000000000000       0x20 ./Core/Src/BLE-JDY18.o
  .rodata        0x0000000000000000       0x5d ./Core/Src/BLE-JDY18.o
- .text.setConfig
+ .text.JDY18_SetConfig
                 0x0000000000000000       0x1c ./Core/Src/BLE-JDY18.o
- .text.reset    0x0000000000000000       0x18 ./Core/Src/BLE-JDY18.o
- .text.sendCommand
+ .text.JDY18_Reset
+                0x0000000000000000       0x18 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_SendCommand
                 0x0000000000000000       0xa8 ./Core/Src/BLE-JDY18.o
- .text.setName  0x0000000000000000       0x44 ./Core/Src/BLE-JDY18.o
- .text.getName  0x0000000000000000       0x48 ./Core/Src/BLE-JDY18.o
- .text.setRole  0x0000000000000000       0x30 ./Core/Src/BLE-JDY18.o
- .text.setBaudRate
+ .text.JDY18_SetName
+                0x0000000000000000       0x44 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_GetName
+                0x0000000000000000       0x48 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_SetRole
+                0x0000000000000000       0x30 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_SetBaudRate
                 0x0000000000000000       0x38 ./Core/Src/BLE-JDY18.o
- .text.scan     0x0000000000000000       0x68 ./Core/Src/BLE-JDY18.o
+ .text.JDY18_Scan
+                0x0000000000000000       0x68 ./Core/Src/BLE-JDY18.o
  .text._getDevicesFromScanStr
                 0x0000000000000000      0x180 ./Core/Src/BLE-JDY18.o
- .debug_info    0x0000000000000000      0xa7c ./Core/Src/BLE-JDY18.o
- .debug_abbrev  0x0000000000000000      0x21a ./Core/Src/BLE-JDY18.o
+ .debug_info    0x0000000000000000      0xa8a ./Core/Src/BLE-JDY18.o
+ .debug_abbrev  0x0000000000000000      0x22d ./Core/Src/BLE-JDY18.o
  .debug_aranges
                 0x0000000000000000       0x68 ./Core/Src/BLE-JDY18.o
  .debug_rnglists
@@ -316,7 +322,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x126 ./Core/Src/BLE-JDY18.o
  .debug_macro   0x0000000000000000       0x10 ./Core/Src/BLE-JDY18.o
  .debug_line    0x0000000000000000      0xb5c ./Core/Src/BLE-JDY18.o
- .debug_str     0x0000000000000000    0xce92a ./Core/Src/BLE-JDY18.o
+ .debug_str     0x0000000000000000    0xce9d5 ./Core/Src/BLE-JDY18.o
  .comment       0x0000000000000000       0x44 ./Core/Src/BLE-JDY18.o
  .debug_frame   0x0000000000000000      0x17c ./Core/Src/BLE-JDY18.o
  .ARM.attributes
@@ -367,7 +373,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./Core/Src/DCMotor.o
  .data          0x0000000000000000        0x0 ./Core/Src/DCMotor.o
  .bss           0x0000000000000000        0x0 ./Core/Src/DCMotor.o
- .text.setDCMotorPWMPercentage
+ .text.DCMOTOR_SetSpeedPercentage
                 0x0000000000000000       0x8e ./Core/Src/DCMotor.o
  .debug_info    0x0000000000000000      0x6ec ./Core/Src/DCMotor.o
  .debug_abbrev  0x0000000000000000      0x176 ./Core/Src/DCMotor.o
@@ -420,7 +426,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x126 ./Core/Src/DCMotor.o
  .debug_macro   0x0000000000000000       0x10 ./Core/Src/DCMotor.o
  .debug_line    0x0000000000000000      0x7a1 ./Core/Src/DCMotor.o
- .debug_str     0x0000000000000000    0xcafd6 ./Core/Src/DCMotor.o
+ .debug_str     0x0000000000000000    0xcafe0 ./Core/Src/DCMotor.o
  .comment       0x0000000000000000       0x44 ./Core/Src/DCMotor.o
  .debug_frame   0x0000000000000000       0x48 ./Core/Src/DCMotor.o
  .ARM.attributes
@@ -608,7 +614,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./Core/Src/Pwm.o
  .data          0x0000000000000000        0x0 ./Core/Src/Pwm.o
  .bss           0x0000000000000000        0x0 ./Core/Src/Pwm.o
- .text.setPWM   0x0000000000000000       0x5e ./Core/Src/Pwm.o
+ .text.PWM_SetValue
+                0x0000000000000000       0x5e ./Core/Src/Pwm.o
  .debug_info    0x0000000000000000      0x79a ./Core/Src/Pwm.o
  .debug_abbrev  0x0000000000000000      0x176 ./Core/Src/Pwm.o
  .debug_aranges
@@ -659,7 +666,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x295 ./Core/Src/Pwm.o
  .debug_macro   0x0000000000000000      0x126 ./Core/Src/Pwm.o
  .debug_line    0x0000000000000000      0x777 ./Core/Src/Pwm.o
- .debug_str     0x0000000000000000    0xcb016 ./Core/Src/Pwm.o
+ .debug_str     0x0000000000000000    0xcb01c ./Core/Src/Pwm.o
  .comment       0x0000000000000000       0x44 ./Core/Src/Pwm.o
  .debug_frame   0x0000000000000000       0x40 ./Core/Src/Pwm.o
  .ARM.attributes
@@ -710,15 +717,15 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./Core/Src/Servo.o
  .data          0x0000000000000000        0x0 ./Core/Src/Servo.o
  .bss           0x0000000000000000        0x0 ./Core/Src/Servo.o
- .text.setServoPWMAngle
+ .text.SERVO_SetAngle
                 0x0000000000000000       0xe0 ./Core/Src/Servo.o
- .text.setServoPWMPercentage
+ .text.SERVO_SetPercentage
                 0x0000000000000000       0xdc ./Core/Src/Servo.o
- .text.__getPWMScale
+ .text.__SERVO_GetPWMScale
                 0x0000000000000000       0x6c ./Core/Src/Servo.o
- .text.__convertScales
+ .text.__SERVO_ConvertScales
                 0x0000000000000000       0x86 ./Core/Src/Servo.o
- .text.__getCalibratedAngle
+ .text.__SERVO_GetCalibratedAngle
                 0x0000000000000000       0x3c ./Core/Src/Servo.o
  .debug_info    0x0000000000000000      0x8c4 ./Core/Src/Servo.o
  .debug_abbrev  0x0000000000000000      0x1d0 ./Core/Src/Servo.o
@@ -771,7 +778,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x126 ./Core/Src/Servo.o
  .debug_macro   0x0000000000000000       0x1c ./Core/Src/Servo.o
  .debug_line    0x0000000000000000      0x82c ./Core/Src/Servo.o
- .debug_str     0x0000000000000000    0xcb0e3 ./Core/Src/Servo.o
+ .debug_str     0x0000000000000000    0xcb100 ./Core/Src/Servo.o
  .comment       0x0000000000000000       0x44 ./Core/Src/Servo.o
  .debug_frame   0x0000000000000000       0xfc ./Core/Src/Servo.o
  .ARM.attributes
@@ -921,7 +928,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 ./Core/Src/main.o
  .debug_macro   0x0000000000000000      0x460 ./Core/Src/main.o
  .debug_macro   0x0000000000000000      0x19b ./Core/Src/main.o
- .debug_macro   0x0000000000000000       0xbe ./Core/Src/main.o
+ .debug_macro   0x0000000000000000       0xb8 ./Core/Src/main.o
  .debug_macro   0x0000000000000000       0x1c ./Core/Src/main.o
  .group         0x0000000000000000        0xc ./Core/Src/stm32f4xx_hal_msp.o
  .group         0x0000000000000000        0xc ./Core/Src/stm32f4xx_hal_msp.o
@@ -4579,26 +4586,26 @@ LOAD D:/Program Files/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.
                 0x0000000008000c24                __aeabi_idiv0
                 0x0000000008000c24                __aeabi_ldiv0
  *(.text*)
- .text.hmc5883l_init
+ .text.HMC5883L_Init
                 0x0000000008000c28       0xde ./Core/Src/HMC5883L.o
-                0x0000000008000c28                hmc5883l_init
+                0x0000000008000c28                HMC5883L_Init
  *fill*         0x0000000008000d06        0x2 
- .text.hmc5883l_read
+ .text.HMC5883L_Read
                 0x0000000008000d08      0x198 ./Core/Src/HMC5883L.o
-                0x0000000008000d08                hmc5883l_read
- .text.hmc5883l_getCalibrationData
+                0x0000000008000d08                HMC5883L_Read
+ .text.HMC5883L_GetCalibrationData
                 0x0000000008000ea0       0x84 ./Core/Src/HMC5883L.o
-                0x0000000008000ea0                hmc5883l_getCalibrationData
- .text.__setDataAxis
+                0x0000000008000ea0                HMC5883L_GetCalibrationData
+ .text.__HMC5883L_SetDataAxis
                 0x0000000008000f24       0x50 ./Core/Src/HMC5883L.o
-                0x0000000008000f24                __setDataAxis
+                0x0000000008000f24                __HMC5883L_SetDataAxis
  *fill*         0x0000000008000f74        0x4 
- .text.__setDataAngles
+ .text.__HMC5883L_SetDataAngles
                 0x0000000008000f78       0x70 ./Core/Src/HMC5883L.o
-                0x0000000008000f78                __setDataAngles
- .text.__getStatus
+                0x0000000008000f78                __HMC5883L_SetDataAngles
+ .text.__HMC5883L_GetStatus
                 0x0000000008000fe8       0x66 ./Core/Src/HMC5883L.o
-                0x0000000008000fe8                __getStatus
+                0x0000000008000fe8                __HMC5883L_GetStatus
  *fill*         0x000000000800104e        0x2 
  .text.main     0x0000000008001050      0x100 ./Core/Src/main.o
                 0x0000000008001050                main
@@ -5349,29 +5356,29 @@ LOAD D:/Program Files/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.
  .debug_rnglists
                 0x0000000000000a31      0x1b7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_macro    0x0000000000000000     0x2946
+.debug_macro    0x0000000000000000     0x2940
  .debug_macro   0x0000000000000000      0x357 ./Core/Src/HMC5883L.o
  .debug_macro   0x0000000000000357      0x460 ./Core/Src/HMC5883L.o
  .debug_macro   0x00000000000007b7      0x19b ./Core/Src/HMC5883L.o
- .debug_macro   0x0000000000000952       0xbe ./Core/Src/HMC5883L.o
- .debug_macro   0x0000000000000a10      0x3ab ./Core/Src/main.o
- .debug_macro   0x0000000000000dbb       0x10 ./Core/Src/main.o
- .debug_macro   0x0000000000000dcb       0x61 ./Core/Src/main.o
- .debug_macro   0x0000000000000e2c       0x10 ./Core/Src/main.o
- .debug_macro   0x0000000000000e3c      0x1f6 ./Core/Src/stm32f4xx_hal_msp.o
- .debug_macro   0x0000000000001032      0x200 ./Core/Src/stm32f4xx_it.o
- .debug_macro   0x0000000000001232       0xff ./Core/Src/sysmem.o
- .debug_macro   0x0000000000001331      0x23c ./Core/Src/sysmem.o
- .debug_macro   0x000000000000156d      0x1e7 ./Core/Src/system_stm32f4xx.o
- .debug_macro   0x0000000000001754      0x247 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_macro   0x000000000000199b      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_macro   0x0000000000001b82      0x1ed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_macro   0x0000000000001d6f      0x22e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
- .debug_macro   0x0000000000001f9d      0x20b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_macro   0x00000000000021a8      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
- .debug_macro   0x000000000000238f      0x1e8 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
- .debug_macro   0x0000000000002577      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
- .debug_macro   0x000000000000275e      0x1e8 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_macro   0x0000000000000952       0xb8 ./Core/Src/HMC5883L.o
+ .debug_macro   0x0000000000000a0a      0x3ab ./Core/Src/main.o
+ .debug_macro   0x0000000000000db5       0x10 ./Core/Src/main.o
+ .debug_macro   0x0000000000000dc5       0x61 ./Core/Src/main.o
+ .debug_macro   0x0000000000000e26       0x10 ./Core/Src/main.o
+ .debug_macro   0x0000000000000e36      0x1f6 ./Core/Src/stm32f4xx_hal_msp.o
+ .debug_macro   0x000000000000102c      0x200 ./Core/Src/stm32f4xx_it.o
+ .debug_macro   0x000000000000122c       0xff ./Core/Src/sysmem.o
+ .debug_macro   0x000000000000132b      0x23c ./Core/Src/sysmem.o
+ .debug_macro   0x0000000000001567      0x1e7 ./Core/Src/system_stm32f4xx.o
+ .debug_macro   0x000000000000174e      0x247 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_macro   0x0000000000001995      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_macro   0x0000000000001b7c      0x1ed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_macro   0x0000000000001d69      0x22e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
+ .debug_macro   0x0000000000001f97      0x20b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_macro   0x00000000000021a2      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
+ .debug_macro   0x0000000000002389      0x1e8 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_macro   0x0000000000002571      0x1e7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_macro   0x0000000000002758      0x1e8 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
 .debug_line     0x0000000000000000    0x13411
  .debug_line    0x0000000000000000      0xc0f ./Core/Src/HMC5883L.o
@@ -5391,38 +5398,38 @@ LOAD D:/Program Files/STM32CubeIDE_1.13.1/STM32CubeIDE/plugins/com.st.stm32cube.
  .debug_line    0x000000000000eebc     0x1a58 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
  .debug_line    0x0000000000010914     0x2afd ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_str      0x0000000000000000    0xd4d4b
- .debug_str     0x0000000000000000    0xd0408 ./Core/Src/HMC5883L.o
-                                      0xd0768 (size before relaxing)
- .debug_str     0x00000000000d0408      0x9cf ./Core/Src/main.o
-                                      0xd103e (size before relaxing)
- .debug_str     0x00000000000d0dd7       0xbf ./Core/Src/stm32f4xx_hal_msp.o
+.debug_str      0x0000000000000000    0xd4fac
+ .debug_str     0x0000000000000000    0xd065a ./Core/Src/HMC5883L.o
+                                      0xd09ba (size before relaxing)
+ .debug_str     0x00000000000d065a      0x9de ./Core/Src/main.o
+                                      0xd127b (size before relaxing)
+ .debug_str     0x00000000000d1038       0xbf ./Core/Src/stm32f4xx_hal_msp.o
                                       0xcb5ea (size before relaxing)
- .debug_str     0x00000000000d0e96       0xc9 ./Core/Src/stm32f4xx_it.o
+ .debug_str     0x00000000000d10f7       0xc9 ./Core/Src/stm32f4xx_it.o
                                       0xcaa96 (size before relaxing)
- .debug_str     0x00000000000d0f5f      0x4dc ./Core/Src/sysmem.o
+ .debug_str     0x00000000000d11c0      0x4dc ./Core/Src/sysmem.o
                                        0x605b (size before relaxing)
- .debug_str     0x00000000000d143b       0xdb ./Core/Src/system_stm32f4xx.o
+ .debug_str     0x00000000000d169c       0xdb ./Core/Src/system_stm32f4xx.o
                                       0xcabbe (size before relaxing)
- .debug_str     0x00000000000d1516       0x34 ./Core/Startup/startup_stm32f446retx.o
+ .debug_str     0x00000000000d1777       0x34 ./Core/Startup/startup_stm32f446retx.o
                                          0x6d (size before relaxing)
- .debug_str     0x00000000000d154a      0xb2e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_str     0x00000000000d17ab      0xb2e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
                                       0xcb783 (size before relaxing)
- .debug_str     0x00000000000d2078      0x34a ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_str     0x00000000000d22d9      0x34a ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
                                       0xcb491 (size before relaxing)
- .debug_str     0x00000000000d23c2      0x121 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_str     0x00000000000d2623      0x121 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
                                       0xcad39 (size before relaxing)
- .debug_str     0x00000000000d24e3      0xaed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
+ .debug_str     0x00000000000d2744      0xaed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.o
                                       0xcbb69 (size before relaxing)
- .debug_str     0x00000000000d2fd0      0x213 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_str     0x00000000000d3231      0x213 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
                                       0xcaff7 (size before relaxing)
- .debug_str     0x00000000000d31e3      0x324 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
+ .debug_str     0x00000000000d3444      0x324 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
                                       0xcb02a (size before relaxing)
- .debug_str     0x00000000000d3507      0xdc7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_str     0x00000000000d3768      0xdc7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
                                       0xcbf13 (size before relaxing)
- .debug_str     0x00000000000d42ce      0x493 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_str     0x00000000000d452f      0x493 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
                                       0xcb72f (size before relaxing)
- .debug_str     0x00000000000d4761      0x5ea ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_str     0x00000000000d49c2      0x5ea ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
                                       0xcb56c (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x4714

@@ -7,7 +7,7 @@
 
 #include "Pwm.h"
 
-void setPWM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
+void PWM_SetValue(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
 		uint16_t pulseLength) {
 	HAL_TIM_PWM_Stop(&timer, channel); // stop generation of pwm
 	TIM_OC_InitTypeDef sConfigOC;

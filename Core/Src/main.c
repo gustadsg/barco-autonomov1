@@ -104,32 +104,32 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  ServoTimerConfig_t servoPWMConfig;
+  SERVO_TimerConfig_t servoPWMConfig;
   servoPWMConfig.handle = htim3;
   servoPWMConfig.channel = TIM_CHANNEL_2;
   servoPWMConfig.period = SERVO_PERIOD;
   servoPWMConfig.minDutyCyclePercentage = SERVO_MIN_DUTY_CICLE;
   servoPWMConfig.maxDutyCyclePercentage = SERVO_MAX_DUTY_CICLE;
 
-  ServoCalibration_t servoCalibration;
+  SERVO_Calibration_t servoCalibration;
   servoCalibration.gain = SERVO_CALIBRATION_GAIN;
   servoCalibration.offset = SERVO_CALIBRATION_OFFSET;
 
-  ServoConfig_t servoConfig;
+  SERVO_Config_t servoConfig;
   servoConfig.timerConfig = servoPWMConfig;
   servoConfig.calibration = servoCalibration;
 
-  HMC5883LConfig_t magnetometerConfig;
-  magnetometerConfig.dataOutputRate = DOR_15;
-  magnetometerConfig.gain = GAIN_0_88;
-  magnetometerConfig.measurementMode = MESUAREMENT_NORMAL;
-  magnetometerConfig.operatingMode = CONTINUOUS_MODE;
-  magnetometerConfig.samplesNum = SAMPLES_8;
+  HMC5883L_Config_t magnetometerConfig;
+  magnetometerConfig.dataOutputRate = HMC5883L_DOR_15;
+  magnetometerConfig.gain = HMC5883L_GAIN_0_88;
+  magnetometerConfig.measurementMode = HMC5883L_MESUAREMENT_NORMAL;
+  magnetometerConfig.operatingMode = HMC5883L_CONTINUOUS_MODE;
+  magnetometerConfig.samplesNum = HMC5883L_SAMPLES_8;
   magnetometerConfig.handle = &hi2c1;
-  hmc5883l_init(magnetometerConfig);
-  hmc5883l_getCalibrationData(magnetometerConfig, &huart2);
+  HMC5883L_Init(magnetometerConfig);
+  HMC5883L_GetCalibrationData(magnetometerConfig, &huart2);
 
-  HMC5883LData_t magnetometerData = {0,0,0,0,0};
+  HMC5883L_Data_t magnetometerData = {0,0,0,0,0};
 
   const int servoMin = SERVO_MIN_ANGLE;
   const int servoMax = SERVO_MAX_ANGLE;
@@ -151,7 +151,7 @@ int main(void)
 //	setServoPWMAngle(servoConfig, pwmServoValue);
 //	HAL_Delay(500);
 
-	hmc5883l_read(magnetometerConfig, &magnetometerData);
+	HMC5883L_Read(magnetometerConfig, &magnetometerData);
 	HAL_Delay(500);
 
   }
