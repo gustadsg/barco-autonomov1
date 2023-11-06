@@ -8,19 +8,29 @@
 
 UART_HandleTypeDef* husart;
 
+const char *JDY18_CommandPrefixStrings[] = {
+	//@brief JDY18_Command_SetConfig,
+    "PERM",
+	//@brief JDY18_Command_Reset,
+    "DEFAULT",
+	//@brief JDY18_Command_SetName,
+	"AT+NAME",
+	//@brief JDY18_Command_GetName,
+    "NAME",
+	//@brief JDY18_Command_SetRole,
+    "ROLE",
+	//@brief JDY18_Command_SetBaudRate,
+    "BAUD",
+	//@brief JDY18_Command_Scan
+    "IQN"
+};
+
 void JDY18_Setup(UART_HandleTypeDef* handle) {
 	husart = handle;
 }
 
-void JDY18_SetConfig(char* config) {
-	JDY18_SendCommand("PERM", config);
-}
-
-void JDY18_Reset() {
-	JDY18_SendCommand("DEFAULT", "");
-}
-
-void JDY18_SendCommand(char* commandPrefix, char* commandParam) {
+void JDY18_SendCommand(JDY18_CommandPrefix_t commandIndex, char* commandParam) {
+	const char* commandPrefix = JDY18_CommandPrefixStrings[commandIndex];
 	char* command = "AT+";
 
 	int commandSize = strlen(command) + strlen(commandPrefix) + strlen(commandParam) + 3;
@@ -35,17 +45,11 @@ void JDY18_SendCommand(char* commandPrefix, char* commandParam) {
 	HAL_UART_Transmit(husart, (uint8_t*) command, commandSize, HAL_MAX_DELAY);
 }
 
-void JDY18_SetName(char* name) {
-	char command[30] = "AT+";
-	strcat(command, name);
-	JDY18_SendCommand("NAME", name);
-}
-
 void JDY18_GetName(char* name) {
 	name = malloc(24);
 	memset(name, 0, 24);
 
-	JDY18_SendCommand("NAME", "");
+	JDY18_SendCommand(JDY18_Command_GetName, "");
 
 	HAL_UART_Receive(husart, (uint8_t*) name, 24, HAL_MAX_DELAY);
 }
@@ -54,7 +58,7 @@ void JDY18_SetRole(JDY18_Role_t role) {
 	char roleStr[2];
 	itoa(role, roleStr, 10);
 
-	JDY18_SendCommand("ROLE", roleStr);
+	JDY18_SendCommand(JDY18_Command_SetRole, roleStr);
 }
 
 void JDY18_SetBaudRate(JDY18_BaudRate_t baud) {
@@ -62,14 +66,14 @@ void JDY18_SetBaudRate(JDY18_BaudRate_t baud) {
 	itoa(baud, baudStr, 10);
 
 
-	JDY18_SendCommand("BAUD", baudStr);
+	JDY18_SendCommand(JDY18_Command_SetBaudRate, baudStr);
 }
 
 void JDY18_Scan(JDY18_Device_t *devices) {
 	char data[JDY18_BUFFER_SZ];
 	memset(data, 0, JDY18_BUFFER_SZ);
 
-	JDY18_SendCommand("IQN", "");
+	JDY18_SendCommand(JDY18_Command_Scan, "");
 	HAL_UART_Receive(husart, (uint8_t*) data, JDY18_BUFFER_SZ, 1000);
 
 	int numDevices = __JDY18_GetDevicesFromScanStr(data, devices, JDY18_MAX_DEVICES);

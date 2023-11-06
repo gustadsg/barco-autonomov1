@@ -38,6 +38,19 @@ typedef enum {
 	JDY18_Baud_230400,
 } JDY18_BaudRate_t;
 
+typedef enum {
+	// @brief Sets permissions configuration of the device
+	JDY18_Command_SetConfig=0,
+	// @brief Reset device to factory settings
+	JDY18_Command_Reset,
+	// @brief Sets the name of the device
+	JDY18_Command_SetName,
+	JDY18_Command_GetName,
+	JDY18_Command_SetRole,
+	JDY18_Command_SetBaudRate,
+	JDY18_Command_Scan,
+} JDY18_CommandPrefix_t;
+
 typedef struct {
 	char name[18];
 	int id;
@@ -52,28 +65,11 @@ typedef struct {
 void JDY18_Setup(UART_HandleTypeDef* bleHuart);
 
 /**
- * @brief Sets permissions configuration of the device
- * @param Pointer to the configuration string
- */
-void JDY18_SetConfig(char* cfg);
-
-/**
- * @brief Reset device to factory settings
- */
-void JDY18_Reset();
-
-/**
  * @brief Sends string command to device
  * @param The command to be sent
  * @param The data to be set. If no data is being set, this param should be ""
  */
-void JDY18_SendCommand(char* commandPrefix, char* commandParam);
-
-/**
- * @brief Sets the name of the device
- * @param Device name
- */
-void JDY18_SetName(char* name);
+void JDY18_SendCommand(JDY18_CommandPrefix_t commandIndex, char* commandParam);
 
 /**
  * @brief Gets the current name of the device

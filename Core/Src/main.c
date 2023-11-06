@@ -131,10 +131,10 @@ int main(void)
 
   HMC5883L_Data_t magnetometerData = {0,0,0,0,0};
 
-  const int servoMin = SERVO_MIN_ANGLE;
-  const int servoMax = SERVO_MAX_ANGLE;
-  int pwmServoIncrement = 5;
-  int pwmServoValue = servoMin;
+   const int servoMin = SERVO_MIN_ANGLE;
+   const int servoMax = SERVO_MAX_ANGLE;
+   int pwmServoIncrement = 5;
+   int pwmServoValue = servoMin;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,11 +145,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	pwmServoValue += pwmServoIncrement;
-//	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
-//
-//	setServoPWMAngle(servoConfig, pwmServoValue);
-//	HAL_Delay(500);
+	pwmServoValue += pwmServoIncrement;
+	if((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax)) pwmServoIncrement = -pwmServoIncrement;
+
+	SERVO_SetAngle(servoConfig, pwmServoValue);
+	HAL_Delay(500);
 
 	HMC5883L_Read(magnetometerConfig, &magnetometerData);
 	HAL_Delay(500);
