@@ -21,13 +21,11 @@
 #define JDY18_N 2
 
 typedef enum {
-	JDY18_ROLE_SLAVE = 0,
-	JDY18_ROLE_MASTER=1,
-	JDY18_ROLE_BEACON=3,
+	JDY18_ROLE_SLAVE = 0, JDY18_ROLE_MASTER = 1, JDY18_ROLE_BEACON = 3,
 } JDY18_Role_t;
 
 typedef enum {
-	JDY18_Baud_1200=1,
+	JDY18_Baud_1200 = 1,
 	JDY18_Baud_2400,
 	JDY18_Baud_4800,
 	JDY18_Baud_9600,
@@ -37,6 +35,19 @@ typedef enum {
 	JDY18_Baud_115200,
 	JDY18_Baud_230400,
 } JDY18_BaudRate_t;
+
+typedef enum {
+	// @brief Sets permissions configuration of the device
+	JDY18_Command_SetConfig = 0,
+	// @brief Reset device to factory settings
+	JDY18_Command_Reset,
+	// @brief Sets the name of the device
+	JDY18_Command_SetName,
+	JDY18_Command_GetName,
+	JDY18_Command_SetRole,
+	JDY18_Command_SetBaudRate,
+	JDY18_Command_Scan,
+} JDY18_CommandPrefix_t;
 
 typedef struct {
 	char name[18];
@@ -49,37 +60,20 @@ typedef struct {
  * @brief Sets internal reference to UART handle
  * @param Pointer to the UART handle
  */
-void JDY18_Setup(UART_HandleTypeDef* bleHuart);
-
-/**
- * @brief Sets permissions configuration of the device
- * @param Pointer to the configuration string
- */
-void JDY18_SetConfig(char* cfg);
-
-/**
- * @brief Reset device to factory settings
- */
-void JDY18_Reset();
+void JDY18_Setup(UART_HandleTypeDef *bleHuart);
 
 /**
  * @brief Sends string command to device
  * @param The command to be sent
  * @param The data to be set. If no data is being set, this param should be ""
  */
-void JDY18_SendCommand(char* commandPrefix, char* commandParam);
-
-/**
- * @brief Sets the name of the device
- * @param Device name
- */
-void JDY18_SetName(char* name);
+void JDY18_SendCommand(JDY18_CommandPrefix_t commandIndex, char *commandParam);
 
 /**
  * @brief Gets the current name of the device
  * @param variable to store the name
  */
-void JDY18_GetName(char* name);
+void JDY18_GetName(char *name);
 
 /**
  * @brief Sets the device's role
@@ -97,7 +91,7 @@ void JDY18_SetBaudRate(JDY18_BaudRate_t baudRate);
  * @briefs Scans for bluetooth devices nearby
  * @param Pointer to devices list
  */
-void JDY18_Scan(JDY18_Device_t* devices);
+void JDY18_Scan(JDY18_Device_t *devices);
 
 /**
  * @brief Calculates the distance of a list of devices based on its RSSI values
@@ -112,7 +106,7 @@ void __JDY18_GetDistanceFromRssi(JDY18_Device_t *devices, int8_t numDevices);
  * @param A pointer to the list of devices
  * @param Num of maximum devices to pu into the list
  */
-int __JDY18_GetDevicesFromScanStr(char* str, JDY18_Device_t* devices, int8_t maxDevices);
-
+int __JDY18_GetDevicesFromScanStr(char *str, JDY18_Device_t *devices,
+		int8_t maxDevices);
 
 #endif /* INC_BLE_JDY18_H_ */
