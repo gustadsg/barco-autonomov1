@@ -12,6 +12,7 @@
 
 #define SERVO_MIN_ANGLE -90;
 #define SERVO_MAX_ANGLE 90;
+#define SERVO_MIDDLE_ANGLE 0;
 #define SERVO_MIN_PERCENT 0;
 #define SERVO_MAX_PERCENT 100;
 
