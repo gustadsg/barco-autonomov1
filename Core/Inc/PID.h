@@ -12,37 +12,27 @@
 #define PID_LAST 1
 
 typedef struct {
-	// Proportional gain
+	// @brief Proportional gain
 	float Kp;
-
-	// Integral gain
+	// @brief Integral gain
 	float Ki;
-
-	// Derivative gain
+	// @brief Derivative gain
 	float Kd;
-
-	// Setpoint: the desired value the system should reach
+	// @brief The desired value the system should reach
 	float setpoint;
-
-	// Measured value: the current value of the system
+	// @brief Measured value: the current value of the system
 	float measured;
-
-	// Maximum output value of the controller
+	// @brief Maximum output value of the controller
 	float maxOutput;
-
-	// Minimum output value of the controller
+	// @brief Minimum output value of the controller
 	float minOutput;
-
-	// Array to store the last two errors for derivative calculation
+	// @brief Array to store the last two errors for derivative calculation
 	float errorArray[2];
-
-	// Integral of the error over time
+	// @brief Integral of the error over time
 	float errorIntegral;
-
-	// Derivative of the error with respect to time
+	// @brief Derivative of the error with respect to time
 	float errorDerivative;
-
-	// The period of time in milliseconds at which the controller operates
+	// @brief The period of time in milliseconds at which the controller operates
 	int periodMs;
 } PID_Controller_t;
 
@@ -55,7 +45,7 @@ typedef struct {
  * @param periodMs Time period in milliseconds at which the controller operates.
  */
 void PID_Create(PID_Controller_t *controller, float kp, float ki, float kd,
-                int periodMs);
+		int periodMs);
 
 /**
  * @brief Sets the saturation limits for the PID controller's output.
