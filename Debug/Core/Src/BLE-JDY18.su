@@ -1,8 +1,0 @@
-../Core/Src/BLE-JDY18.c:20:6:JDY18_Setup	16	static
-../Core/Src/BLE-JDY18.c:24:6:JDY18_SendCommand	40	static
-../Core/Src/BLE-JDY18.c:41:6:JDY18_GetName	16	static
-../Core/Src/BLE-JDY18.c:50:6:JDY18_SetRole	24	static
-../Core/Src/BLE-JDY18.c:57:6:JDY18_SetBaudRate	24	static
-../Core/Src/BLE-JDY18.c:64:6:JDY18_Scan	1048	static
-../Core/Src/BLE-JDY18.c:76:6:__JDY18_GetDistanceFromRssi	32	static
-../Core/Src/BLE-JDY18.c:83:5:__JDY18_GetDevicesFromScanStr	1104	static
