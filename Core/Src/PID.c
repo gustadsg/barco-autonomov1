@@ -14,7 +14,7 @@ void PID_Create(PID_Controller_t *controller, float kp, float ki, float kd,
 	controller->Ki = ki;
 	controller->Kd = kd;
 
-	controller->setpoint = 0;s
+	controller->setpoint = 0;
 	controller->measured = 0;
 
 	controller->errorIntegral = 0;
