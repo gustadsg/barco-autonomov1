@@ -24,6 +24,7 @@
 #include "BLE-JDY18.h"
 #include "HMC5883L.h"
 #include "Servo.h"
+#include "PID.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,6 +39,11 @@
 #define SERVO_MAX_DUTY_CICLE 0.115;
 #define SERVO_CALIBRATION_GAIN 1.47;
 #define SERVO_CALIBRATION_OFFSET -12.6;
+
+#define PID_SERVO_KP 1;
+#define PID_SERVO_KI 1;
+#define PID_SERVO_KD 1;
+#define PID_PERIOD_MS 500;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,6 +57,7 @@ I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -62,6 +69,7 @@ static void MX_GPIO_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void setPWMM(TIM_HandleTypeDef timer, uint32_t channel, uint32_t period,
 		uint16_t pulseLength);
@@ -102,22 +110,26 @@ int main(void) {
 	MX_TIM3_Init();
 	MX_I2C1_Init();
 	MX_USART2_UART_Init();
+	MX_USART3_UART_Init();
 	/* USER CODE BEGIN 2 */
+	JDY18_Setup(&huart3);
+	JDY18_SetRole(JDY18_ROLE_MASTER);
+
 	SERVO_TimerConfig_t servoPWMConfig;
 	servoPWMConfig.handle = htim3;
 	servoPWMConfig.channel = TIM_CHANNEL_2;
-	servoPWMConfig.period = SERVO_PERIOD
-	;
-	servoPWMConfig.minDutyCyclePercentage = SERVO_MIN_DUTY_CICLE
-	;
-	servoPWMConfig.maxDutyCyclePercentage = SERVO_MAX_DUTY_CICLE
-	;
+	const uint32_t servoPeriod = SERVO_PERIOD;
+	servoPWMConfig.period = servoPeriod;
+	const float servoMinDutyCicle = SERVO_MIN_DUTY_CICLE;
+	const float servoMaxDutyCicle = SERVO_MAX_DUTY_CICLE;
+	servoPWMConfig.minDutyCyclePercentage = servoMinDutyCicle;
+	servoPWMConfig.maxDutyCyclePercentage = servoMaxDutyCicle;
 
 	SERVO_Calibration_t servoCalibration;
-	servoCalibration.gain = SERVO_CALIBRATION_GAIN
-	;
-	servoCalibration.offset = SERVO_CALIBRATION_OFFSET
-	;
+	const float servoCalibrationGain = SERVO_CALIBRATION_GAIN;
+	const float servoOffset = SERVO_CALIBRATION_OFFSET;
+	servoCalibration.gain = servoCalibrationGain;
+	servoCalibration.offset = servoOffset;
 
 	SERVO_Config_t servoConfig;
 	servoConfig.timerConfig = servoPWMConfig;
@@ -135,12 +147,22 @@ int main(void) {
 
 	HMC5883L_Data_t magnetometerData = { 0, 0, 0, 0, 0 };
 
-	const int servoMin = SERVO_MIN_ANGLE
-	;
-	const int servoMax = SERVO_MAX_ANGLE
-	;
-	int pwmServoIncrement = 5;
-	int pwmServoValue = servoMin;
+	JDY18_Device_t devices[JDY18_MAX_DEVICES];
+
+	const float pidServoKp = PID_SERVO_KP;
+	const float pidServoKi = PID_SERVO_KI;
+	const float pidServoKd = PID_SERVO_KD;
+	const int pidPeriodMs = PID_PERIOD_MS;
+	const float servoMinAngle = SERVO_MIN_ANGLE;
+	const float servoMaxAngle = SERVO_MAX_ANGLE;
+	const float servoMiddleAngle = SERVO_MIDDLE_ANGLE;
+
+	PID_Controller_t controllerServo;
+	PID_Create(&controllerServo, pidServoKp, pidServoKi, pidServoKd, pidPeriodMs);
+	PID_SetSaturationLimits(&controllerServo, servoMinAngle, servoMaxAngle);
+	PID_SetSetpoint(&controllerServo, servoMiddleAngle);
+
+	float servoAction = 0;
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -150,16 +172,14 @@ int main(void) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		pwmServoValue += pwmServoIncrement;
-		if ((pwmServoValue <= servoMin) || (pwmServoValue >= servoMax))
-			pwmServoIncrement = -pwmServoIncrement;
-
-		SERVO_SetAngle(servoConfig, pwmServoValue);
-		HAL_Delay(500);
-
+		JDY18_Scan(devices);
+		// TODO: Calculate current position;
 		HMC5883L_Read(magnetometerConfig, &magnetometerData);
-		HAL_Delay(500);
 
+		// Controle do Servo
+		PID_ProcessInput(&controllerServo, magnetometerData.degrees);
+		servoAction = PID_CalculateControlAction(&controllerServo);
+		SERVO_SetAngle(servoConfig, servoAction);
 	}
 	/* USER CODE END 3 */
 }
@@ -313,6 +333,37 @@ static void MX_USART2_UART_Init(void) {
 }
 
 /**
+ * @brief USART3 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_USART3_UART_Init(void) {
+
+	/* USER CODE BEGIN USART3_Init 0 */
+
+	/* USER CODE END USART3_Init 0 */
+
+	/* USER CODE BEGIN USART3_Init 1 */
+
+	/* USER CODE END USART3_Init 1 */
+	huart3.Instance = USART3;
+	huart3.Init.BaudRate = 9600;
+	huart3.Init.WordLength = UART_WORDLENGTH_8B;
+	huart3.Init.StopBits = UART_STOPBITS_1;
+	huart3.Init.Parity = UART_PARITY_NONE;
+	huart3.Init.Mode = UART_MODE_TX_RX;
+	huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+	if (HAL_UART_Init(&huart3) != HAL_OK) {
+		Error_Handler();
+	}
+	/* USER CODE BEGIN USART3_Init 2 */
+
+	/* USER CODE END USART3_Init 2 */
+
+}
+
+/**
  * @brief GPIO Initialization Function
  * @param None
  * @retval None
@@ -336,22 +387,6 @@ static void MX_GPIO_Init(void) {
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : PC5 */
-	GPIO_InitStruct.Pin = GPIO_PIN_5;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : PB10 */
-	GPIO_InitStruct.Pin = GPIO_PIN_10;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	/* USER CODE BEGIN MX_GPIO_Init_2 */
 	/* USER CODE END MX_GPIO_Init_2 */
