@@ -7,6 +7,37 @@
 
 #include "Positioning_BLE.h";
 
+void POSITIONING_BLE_CreateConfig(POSITIONING_BLE_Config_t *config, POSITIONING_BLE_Devices_Info_t beaconsInfo, JDY18_Device_t* devicesList, int numOfDevices) {
+	for (int i = 0; i < numOfDevices; i++) {
+		const int isDepartureDevice = !strcmp(devicesList[i].name, beaconsInfo.departureDevice.name);
+		if(isDepartureDevice) {
+			config->depart_beacon.device = devicesList[i];
+			config->depart_beacon.point.x = beaconsInfo.departureDevice.x;
+			config->depart_beacon.point.y = beaconsInfo.departureDevice.y;
+
+			continue;
+		}
+
+		const int isArrivalDevice = !strcmp(devicesList[i].name, beaconsInfo.arrivalDevice.name);
+		if(!strcmp(devicesList[i].name, beaconsInfo.arrivalDevice.name)) {
+			config->arrival_beacon.device = devicesList[i];
+			config->arrival_beacon.point.x = beaconsInfo.arrivalDevice.x;
+			config->arrival_beacon.point.y = beaconsInfo.arrivalDevice.y;
+
+			continue;
+		}
+
+		const int isOtherDevice = !strcmp(devicesList[i].name, beaconsInfo.otherDevice.name);
+		if(isOtherDevice) {
+			config->other_beacon.device = devicesList[i];
+			config->other_beacon.point.x = beaconsInfo.otherDevice.x;
+			config->other_beacon.point.y = beaconsInfo.otherDevice.y;
+
+			continue;
+		}
+	}
+}
+
 POSITIONING_BLE_Cartesian_Point_t POSITIONING_BLE_GetPosition(
 		POSITIONING_BLE_Config_t *config) {
 	const float d1 = config->depart_beacon.device.distance;

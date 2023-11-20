@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "positioning_ble.h": "c",
+        "ble-jdy18.h": "c"
+    }
+}
