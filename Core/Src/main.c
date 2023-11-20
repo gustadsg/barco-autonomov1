@@ -25,6 +25,8 @@
 #include "HMC5883L.h"
 #include "Servo.h"
 #include "PID.h"
+#include "Positioning_BLE.h"
+#include "DCMotor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,6 +41,8 @@
 #define SERVO_MAX_DUTY_CICLE 0.115;
 #define SERVO_CALIBRATION_GAIN 1.47;
 #define SERVO_CALIBRATION_OFFSET -12.6;
+
+#define DCMOTOR_PERIOD 1250;
 
 #define PID_SERVO_KP 1;
 #define PID_SERVO_KI 1;
@@ -112,9 +116,35 @@ int main(void) {
 	MX_USART2_UART_Init();
 	MX_USART3_UART_Init();
 	/* USER CODE BEGIN 2 */
+
+	// POSITION AND DC MOTOR CONFIGURATION
 	JDY18_Setup(&huart3);
 	JDY18_SetRole(JDY18_ROLE_MASTER);
 
+	JDY18_Device_t devices[JDY18_MAX_DEVICES];
+	POSITIONING_BLE_Config_t beaconPositioningConfig;
+
+	POSITIONING_BLE_Devices_Info_t devicesInfo;
+	strcpy(devicesInfo.departureDevice.name,"PSE2022_B1");
+	devicesInfo.departureDevice.x = 11.495;
+	devicesInfo.departureDevice.y = 34.342;
+
+	strcpy(devicesInfo.arrivalDevice.name,"PSE2022_B2");
+	devicesInfo.arrivalDevice.x = 0;
+	devicesInfo.arrivalDevice.y = 0;
+
+	strcpy(devicesInfo.otherDevice.name,"PSE2022_B3");
+	devicesInfo.otherDevice.x = -12.64;
+	devicesInfo.otherDevice.y = 16.948;
+
+// TODO: verify configuration and adjust according to the pin map (not released yet)
+	int dcMotorPeriod = DCMOTOR_PERIOD;
+	DCMOTOR_TimerConfig_t dcmotorConfig;
+	dcmotorConfig.channel = TIM_CHANNEL_3;
+	dcmotorConfig.handle = htim3;
+	dcmotorConfig.period = dcMotorPeriod;
+
+	// SERVO AND HMC588L CONFIGURATION
 	SERVO_TimerConfig_t servoPWMConfig;
 	servoPWMConfig.handle = htim3;
 	servoPWMConfig.channel = TIM_CHANNEL_2;
@@ -147,8 +177,8 @@ int main(void) {
 
 	HMC5883L_Data_t magnetometerData = { 0, 0, 0, 0, 0 };
 
-	JDY18_Device_t devices[JDY18_MAX_DEVICES];
-
+	
+	// CONTROLLERS CONFIGURATION
 	const float pidServoKp = PID_SERVO_KP;
 	const float pidServoKi = PID_SERVO_KI;
 	const float pidServoKd = PID_SERVO_KD;
@@ -156,13 +186,27 @@ int main(void) {
 	const float servoMinAngle = SERVO_MIN_ANGLE;
 	const float servoMaxAngle = SERVO_MAX_ANGLE;
 	const float servoMiddleAngle = SERVO_MIDDLE_ANGLE;
+	float servoAction = 0;
 
 	PID_Controller_t controllerServo;
 	PID_Create(&controllerServo, pidServoKp, pidServoKi, pidServoKd, pidPeriodMs);
 	PID_SetSaturationLimits(&controllerServo, servoMinAngle, servoMaxAngle);
 	PID_SetSetpoint(&controllerServo, servoMiddleAngle);
 
-	float servoAction = 0;
+
+	const float pidDcMotorKp = 1;
+	const float pidDcMotorKi = 0;
+	const float pidDcMotorKd = 0;
+	const int pidPeriodMs = PID_PERIOD_MS;
+	const float DcMotorMinPercentage = 50;
+	const float DcMotorMaxPercentage = 100;
+	float dcMotorAction = 0;
+
+	PID_Controller_t controllerDcMotor;
+	PID_Create(&controllerDcMotor, pidDcMotorKp, pidDcMotorKi, pidDcMotorKd, pidPeriodMs);
+	PID_SetSaturationLimits(&controllerDcMotor, DcMotorMinPercentage, DcMotorMaxPercentage);
+	PID_SetSetpoint(&controllerDcMotor, 0);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -172,14 +216,25 @@ int main(void) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		JDY18_Scan(devices);
-		// TODO: Calculate current position;
-		HMC5883L_Read(magnetometerConfig, &magnetometerData);
 
-		// Controle do Servo
+		// DC Motor control
+		int numOfDevices = JDY18_Scan(devices);
+		POSITIONING_BLE_CreateConfig(&beaconPositioningConfig, devicesInfo, devices, numOfDevices);
+		const POSITIONING_BLE_Cartesian_Point_t currentPosition = POSITIONING_BLE_GetPosition(&beaconPositioningConfig);
+		
+		float distanceFromArrival = sqrt(currentPosition.x*currentPosition.x + currentPosition.y*currentPosition.y);
+		PID_ProcessInput(&controllerDcMotor, distanceFromArrival);
+		dcMotorAction = PID_CalculateControlAction(&controllerDcMotor);
+		DCMOTOR_SetSpeedPercentage(dcmotorConfig, dcMotorAction);
+
+		// Servo control
+		HMC5883L_Read(magnetometerConfig, &magnetometerData);
 		PID_ProcessInput(&controllerServo, magnetometerData.degrees);
 		servoAction = PID_CalculateControlAction(&controllerServo);
 		SERVO_SetAngle(servoConfig, servoAction);
+
+		// TODO: create bare metal final state machine (or freeRTOS program)
+		HAL_Delay(5000);
 	}
 	/* USER CODE END 3 */
 }
