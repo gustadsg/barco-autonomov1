@@ -61,7 +61,7 @@ void JDY18_SetBaudRate(JDY18_BaudRate_t baud) {
 	JDY18_SendCommand(JDY18_Command_SetBaudRate, baudStr);
 }
 
-void JDY18_Scan(JDY18_Device_t *devices) {
+int JDY18_Scan(JDY18_Device_t *devices) {
 	char data[JDY18_BUFFER_SZ];
 	memset(data, 0, JDY18_BUFFER_SZ);
 
@@ -71,6 +71,8 @@ void JDY18_Scan(JDY18_Device_t *devices) {
 	int numDevices = __JDY18_GetDevicesFromScanStr(data, devices,
 	JDY18_MAX_DEVICES);
 	__JDY18_GetDistanceFromRssi(devices, numDevices);
+
+	return numDevices;
 }
 
 void __JDY18_GetDistanceFromRssi(JDY18_Device_t *devices, int8_t numDevices) {

@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <inttypes.h>
 #include "stm32f4xx_hal.h"
 
 #define JDY18_BUFFER_SZ 1024
@@ -88,10 +89,11 @@ void JDY18_SetRole(JDY18_Role_t role);
 void JDY18_SetBaudRate(JDY18_BaudRate_t baudRate);
 
 /**
- * @briefs Scans for bluetooth devices nearby
- * @param Pointer to devices list
+ * @briefs Scans for bluetooth devices nearby.
+ * @param devices Pointer to devices list.
+ * @return Number of devices found.
  */
-void JDY18_Scan(JDY18_Device_t *devices);
+int JDY18_Scan(JDY18_Device_t *devices);
 
 /**
  * @brief Calculates the distance of a list of devices based on its RSSI values
