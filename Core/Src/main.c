@@ -25,6 +25,7 @@
 #include "HMC5883L.h"
 #include "Servo.h"
 #include "PID.h"
+#include "Positioning_BLE.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
