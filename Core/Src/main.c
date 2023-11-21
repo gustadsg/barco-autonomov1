@@ -120,7 +120,6 @@ int main(void) {
 	//UART2 CONFIGURATION
 	static uint8_t HAL_Status = 0x01U; // HAL_StatusTypeDef
 	static uint32_t Timeout = 1000; // In miliseconds
-	static char vetor[15] = "Estou de volta\n";
 
 	// POSITION AND DC MOTOR CONFIGURATION
 	JDY18_Setup(&huart3);
@@ -227,7 +226,11 @@ int main(void) {
 		POSITIONING_BLE_CreateConfig(&beaconPositioningConfig, devicesInfo, devices, numOfDevices);
 		const POSITIONING_BLE_Cartesian_Point_t currentPosition = POSITIONING_BLE_GetPosition(&beaconPositioningConfig);
 		
-		HAL_Status =  HAL_UART_Transmit(&huart2, (uint8_t*) vetor, strlen(vetor), Timeout);
+		char *str1  = "Mensagem: ";
+		strcat(str1, itoa(numOfDevices));
+		strcat(str1, "\n");
+
+		HAL_Status =  HAL_UART_Transmit(&huart2, (uint8_t*) str1, strlen(str1), Timeout);
 
 		float distanceFromArrival = sqrt(currentPosition.x*currentPosition.x + currentPosition.y*currentPosition.y);
 		PID_ProcessInput(&controllerDcMotor, distanceFromArrival);
