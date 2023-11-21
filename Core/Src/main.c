@@ -227,7 +227,7 @@ int main(void) {
 		POSITIONING_BLE_CreateConfig(&beaconPositioningConfig, devicesInfo, devices, numOfDevices);
 		const POSITIONING_BLE_Cartesian_Point_t currentPosition = POSITIONING_BLE_GetPosition(&beaconPositioningConfig);
 		
-		HAL_Status =  (&huart2, (uint8_t*) vetor, strlen(vetor), Timeout);
+		HAL_Status =  HAL_UART_Transmit(&huart2, (uint8_t*) vetor, strlen(vetor), Timeout);
 
 		float distanceFromArrival = sqrt(currentPosition.x*currentPosition.x + currentPosition.y*currentPosition.y);
 		PID_ProcessInput(&controllerDcMotor, distanceFromArrival);
