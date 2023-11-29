@@ -48,6 +48,10 @@
 #define PID_SERVO_KI 1;
 #define PID_SERVO_KD 1;
 #define PID_PERIOD_MS 500;
+
+#define DATA_COLLECTING_STATE 0
+#define PROCESSING_STATE 1
+#define OUTPUT_WRITING_STATE 2
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -224,28 +228,53 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	//Device_t devices[MAX_DEVICES];
 	DCMOTOR_SetDirection(dcMotorConfig, FORWARD);
+	int currentState = DATA_COLLECTING_STATE;
 	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		// TODO: initialize timer
 
-		// DC Motor control
-		int numOfDevices = JDY18_Scan(devices);
-		POSITIONING_BLE_CreateConfig(&beaconPositioningConfig, devicesInfo, devices, numOfDevices);
-		const POSITIONING_BLE_Cartesian_Point_t currentPosition = POSITIONING_BLE_GetPosition(&beaconPositioningConfig);
+		switch(currentState) {
+			case DATA_COLLECTING_STATE:
+				// JDY18
+				int numOfDevices = JDY18_Scan(devices);
+				POSITIONING_BLE_CreateConfig(&beaconPositioningConfig, devicesInfo, devices, numOfDevices);
+				const POSITIONING_BLE_Cartesian_Point_t currentPosition = POSITIONING_BLE_GetPosition(&beaconPositioningConfig);
+
+				// HMC5883L
+				HMC5883L_Read(magnetometerConfig, &magnetometerData);
+
+				// UPDATE STATE
+				currentState = PROCESSING_STATE;
+				break;
+			case PROCESSING_STATE:
+				// DCMOTOR
+				float distanceFromArrival = sqrt(currentPosition.x*currentPosition.x + currentPosition.y*currentPosition.y);
+				PID_ProcessInput(&controllerDcMotor, distanceFromArrival);
+				dcMotorAction = PID_CalculateControlAction(&controllerDcMotor);
+
+
+				// SERVO
+				PID_ProcessInput(&controllerServo, magnetometerData.degrees);
+				servoAction = PID_CalculateControlAction(&controllerServo);
+
+				// UPDATE STATE
+				currentState = OUTPUT_WRITING_STATE;
+				break;
+			case OUTPUT_WRITING_STATE:
+				// DCMOTOR
+				DCMOTOR_SetSpeedPercentage(dcMotorConfig, dcMotorAction);
+
+				// SERVO
+				SERVO_SetAngle(servoConfig, servoAction);
+
+				// UPDATE STATE
+				currentState = DATA_COLLECTING_STATE;
+				break;
+		}
 		
-		float distanceFromArrival = sqrt(currentPosition.x*currentPosition.x + currentPosition.y*currentPosition.y);
-		PID_ProcessInput(&controllerDcMotor, distanceFromArrival);
-		dcMotorAction = PID_CalculateControlAction(&controllerDcMotor);
-		DCMOTOR_SetSpeedPercentage(dcMotorConfig, dcMotorAction);
-
-		// Servo control
-		HMC5883L_Read(magnetometerConfig, &magnetometerData);
-		PID_ProcessInput(&controllerServo, magnetometerData.degrees);
-		servoAction = PID_CalculateControlAction(&controllerServo);
-		SERVO_SetAngle(servoConfig, servoAction);
-
-		// TODO: create bare metal final state machine (or freeRTOS program)
+		// TODO: wait for timer to timeout
 		HAL_Delay(5000);
 	}
   /* USER CODE END 3 */
